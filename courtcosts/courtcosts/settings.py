@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-&hyp^8h_x$ksu5#anrl*c3z!2mb9j6es9insd$d0e17_%hc351
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
 
     'directory',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -79,12 +81,14 @@ WSGI_APPLICATION = 'courtcosts.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'POST': '5432'
+        'NAME': 'courtcosts',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': 'db',  # Используем имя сервиса из docker-compose
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -127,3 +131,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# AUTH_USER_MODEL = 'user.User'
+

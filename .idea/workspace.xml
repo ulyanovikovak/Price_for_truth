@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added directory">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added postgres and new url">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/directory/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/directory/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/directory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/directory/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/directory/migrations/0001_initial.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +28,16 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "/Users/ulianovikova/PycharmProjects/Price_for_truth/courtcosts"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/courtcosts" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -53,7 +63,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741618036748</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added postgres and new url">
+      <option name="closed" value="true" />
+      <created>1741781698165</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741781698165</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -69,6 +87,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added directory" />
-    <option name="LAST_COMMIT_MESSAGE" value="added directory" />
+    <MESSAGE value="added postgres and new url" />
+    <option name="LAST_COMMIT_MESSAGE" value="added postgres and new url" />
   </component>
 </project>
