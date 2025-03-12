@@ -4,16 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added postgres and new url">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added docker and user app">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courtcosts/directory/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -71,7 +82,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741781698165</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added docker and user app">
+      <option name="closed" value="true" />
+      <created>1741799289546</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741799289546</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -88,6 +107,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added directory" />
     <MESSAGE value="added postgres and new url" />
-    <option name="LAST_COMMIT_MESSAGE" value="added postgres and new url" />
+    <MESSAGE value="added docker and user app" />
+    <option name="LAST_COMMIT_MESSAGE" value="added docker and user app" />
   </component>
 </project>

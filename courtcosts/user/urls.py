@@ -17,14 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-# import sys
-# sys.path.append("directory")
-
-# from .views import price, price_id, inflation, inflation_id
+from .views import RegisterView, LoginView, LogoutView
 
 urlpatterns = [
-    # path('login/', price),
-    # path('registration', price_id),
-    # path('logout/', inflation),
-    # path('profile/', inflation_id)
+    path('register/', RegisterView.as_view()),
+    path('login/', LoginView.as_view()),
+    path('logout/', LogoutView.as_view()),
 ]
