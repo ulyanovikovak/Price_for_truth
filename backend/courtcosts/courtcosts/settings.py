@@ -31,11 +31,14 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Разрешить фронтенд
+]
+
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
 
     'rest_framework',
+    'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
@@ -66,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'courtcosts.urls'

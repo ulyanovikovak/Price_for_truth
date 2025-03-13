@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added models for user">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="update user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/courtcosts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/courtcosts/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/courtcosts/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/courtcosts/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741862794251</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update user">
+      <option name="closed" value="true" />
+      <created>1741875721159</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1741875721159</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -124,6 +129,7 @@
     <MESSAGE value="added docker and user app" />
     <MESSAGE value="update useer" />
     <MESSAGE value="added models for user" />
-    <option name="LAST_COMMIT_MESSAGE" value="added models for user" />
+    <MESSAGE value="update user" />
+    <option name="LAST_COMMIT_MESSAGE" value="update user" />
   </component>
 </project>
