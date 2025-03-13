@@ -46,8 +46,8 @@ const AuthPage = ({ isRegister }) => {
         <h2>{isRegister ? "Register" : "Login"}</h2>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <input type="text" name="username" placeholder="Username" onChange={handleChange} required />
-          {isRegister && <input type="email" name="email" placeholder="Email" onChange={handleChange} required />}
+          {isRegister && <input type="text" name="username" placeholder="Username" onChange={handleChange} required />}
+          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
           <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
           {isRegister && <input type="password" name="password2" placeholder="Confirm Password" onChange={handleChange} required />}
           <button type="submit">{isRegister ? "Register" : "Login"}</button>
