@@ -30,10 +30,16 @@ const AuthPage = ({ isRegister }) => {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Authentication failed");
-
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+      console.log("Server response:", data); // Debug API response
+
+      if (!response.ok || !data.access) {
+        throw new Error("Authentication failed");
+      }
+
+      localStorage.setItem("token", data.access);
+      console.log("Token saved:", localStorage.getItem("token")); // Debug token save
+
       navigate("/profile");
     } catch (err) {
       setError(err.message);
@@ -46,14 +52,14 @@ const AuthPage = ({ isRegister }) => {
         <h2>{isRegister ? "Register" : "Login"}</h2>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
-          {isRegister && <input type="text" name="username" placeholder="Username" onChange={handleChange} required />}
+        {isRegister && <input type="text" name="username" placeholder="Username" onChange={handleChange} required />}
           <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
           <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
           {isRegister && <input type="password" name="password2" placeholder="Confirm Password" onChange={handleChange} required />}
           <button type="submit">{isRegister ? "Register" : "Login"}</button>
         </form>
         <p>
-          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
+          {isRegister ? "Already have an account?" : "Don't have an account?"} 
           <a href={isRegister ? "/login" : "/register"}>{isRegister ? "Login" : "Register"} here</a>
         </p>
       </div>
