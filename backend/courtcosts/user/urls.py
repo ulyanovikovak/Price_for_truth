@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import RegisterView, LoginView, LogoutView, CalculationCreateView, SpendingCalculationCreateView, \
-    UserDetailView
+    ProfileView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -31,5 +31,5 @@ urlpatterns = [
     path('spending/create/', SpendingCalculationCreateView.as_view(), name='spending-calculation-create'),
 
     # Эндпоинт для получения данных пользователя и его расчетов
-    path('profile/', UserDetailView.as_view(), name='user-profile'),
+    path('profile/', ProfileView.as_view()),
 ]
