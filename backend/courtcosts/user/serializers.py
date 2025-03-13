@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import RefreshToken
+
+from backend.courtcosts.user.models import Calculation, SpendingCalculation
 
 User = get_user_model()
 
@@ -38,3 +39,20 @@ class LoginSerializer(serializers.Serializer):
 class JWTSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
+
+
+class CalculationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Calculation
+        fields = ['id', 'name', 'slug', 'description', 'sum', 'user']  # Поля, доступные в API
+        read_only_fields = ['id', 'user']  # Поля, которые нельзя изменять через API
+
+
+class SpendingCalculationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpendingCalculation
+        fields = ['id', 'name', 'slug', 'description', 'price', 'date', 'category', 'calculation',
+                  'inflation']  # Поля модели
+        read_only_fields = ['id', 'calculation']  # ID создается автоматически
+        inflation = serializers.PrimaryKeyRelatedField(required=False, allow_null=True,
+                                                       queryset=SpendingCalculation.objects.all())

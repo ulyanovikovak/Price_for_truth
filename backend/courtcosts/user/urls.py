@@ -17,10 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import RegisterView, LoginView, LogoutView
+from .views import RegisterView, LoginView, LogoutView, CalculationCreateView, SpendingCalculationCreateView, \
+    UserDetailView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
+    # Эндпоинт для создания Calculation (только для авторизованных пользователей)
+    path('calculations/create/', CalculationCreateView.as_view(), name='calculation-create'),
+
+    # Эндпоинт для создания SpendingCalculation внутри Calculation (только для авторизованных пользователей)
+    path('spending/create/', SpendingCalculationCreateView.as_view(), name='spending-calculation-create'),
+
+    # Эндпоинт для получения данных пользователя и его расчетов
+    path('profile/', UserDetailView.as_view(), name='user-profile'),
 ]

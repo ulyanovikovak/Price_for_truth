@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from courtcosts.directory.models import Categories, Inflation
+from backend.courtcosts.directory.models import Categories, Inflation
 
 
 # Create your models here.
@@ -21,7 +21,7 @@ class User(AbstractUser):
         return self.username
 
 
-class Сalculation(models.Model):
+class Calculation(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -38,14 +38,14 @@ class Сalculation(models.Model):
         return self.date
 
 
-class SpendingСalсulation(models.Model):
+class SpendingCalculation(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     date = models.DateField()
     category = models.ForeignKey(to=Categories, on_delete=models.PROTECT)
-    calculation = models.ForeignKey(to=Сalculation, on_delete=models.PROTECT)
+    calculation = models.ForeignKey(to=Calculation, on_delete=models.PROTECT)
     inflation = models.ForeignKey(to=Inflation, on_delete=models.PROTECT)
 
     class Meta:
