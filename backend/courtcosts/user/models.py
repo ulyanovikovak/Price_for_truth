@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from backend.courtcosts.directory.models import Categories, Inflation
+from directory.models import Categories, Inflation
 
 
 # Create your models here.
@@ -30,9 +30,9 @@ class Calculation(models.Model):
     # category = models.ForeignKey(to=Categories, on_delete=models.PROTECT)
 
     class Meta:
-        db_table = 'inflation'
-        verbose_name = 'inflation'
-        verbose_name_plural = 'inflation'
+        db_table = 'calculation'
+        verbose_name = 'calculation'
+        verbose_name_plural = 'calculation'
 
     def __str__(self):
         return self.date
@@ -49,9 +49,9 @@ class SpendingCalculation(models.Model):
     inflation = models.ForeignKey(to=Inflation, on_delete=models.PROTECT)
 
     class Meta:
-        db_table = 'spending'
-        verbose_name = 'spending'
-        verbose_name_plural = 'spending'
+        db_table = 'spendingCalculation'
+        verbose_name = 'spendingCalculation'
+        verbose_name_plural = 'spendingCalculation'
 
     def __str__(self):
         return self.name

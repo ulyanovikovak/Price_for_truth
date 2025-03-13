@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from backend.courtcosts.user.models import Calculation, SpendingCalculation
+from .models import Calculation, SpendingCalculation
 
 User = get_user_model()
 
