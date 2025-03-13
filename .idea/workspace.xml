@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="added docker and user app">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="update useer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/courtcosts/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/directory/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/courtcosts/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741799289546</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update useer">
+      <option name="closed" value="true" />
+      <created>1741806108093</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741806108093</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -108,6 +111,7 @@
     <MESSAGE value="added directory" />
     <MESSAGE value="added postgres and new url" />
     <MESSAGE value="added docker and user app" />
-    <option name="LAST_COMMIT_MESSAGE" value="added docker and user app" />
+    <MESSAGE value="update useer" />
+    <option name="LAST_COMMIT_MESSAGE" value="update useer" />
   </component>
 </project>
