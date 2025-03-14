@@ -38,6 +38,7 @@ const AuthPage = ({ isRegister }) => {
       }
 
       localStorage.setItem("token", data.access);
+      localStorage.setItem("refresh_token", data.refresh);
       console.log("Token saved:", localStorage.getItem("token")); // Debug token save
 
       navigate("/profile");

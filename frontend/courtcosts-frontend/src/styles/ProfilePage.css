@@ -1,42 +1,67 @@
 body {
   background-color: #f4f7fc;
   font-family: Arial, sans-serif;
-}
-
-.profile-container {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vw;
 }
 
-.profile-box {
+.profile-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 400px;
 }
 
-.profile-box h2 {
-  color: #333;
+.topbar {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.profile-box p {
-  color: #666;
-}
-
-.profile-box ul {
-  list-style: none;
-  padding: 0;
-}
-
-.profile-box ul li {
-  background: #e7ebff;
-  margin: 5px 0;
-  padding: 10px;
+.logout-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 15px;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-header {
+  width: 100%;
+  padding: 2rem;
+  background-color: #5c67f2;
+  color: white;
+  text-align: center;
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.profile-header p {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.calculations-section {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
 }
 
 .search-input {
@@ -45,18 +70,89 @@ body {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 16px;
 }
 
-.profile-box button {
-  margin-top: 10px;
-  padding: 10px;
+.create-button {
   background-color: #5c67f2;
   color: white;
   border: none;
+  padding: 12px;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
 }
 
-.profile-box button:hover {
+.create-button:hover {
   background-color: #4a54e1;
+}
+
+.calculations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.calculation-card {
+  background: #e7ebff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.calculation-card h4 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.calculation-card p {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  text-align: center;
+}
+
+.modal input {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
