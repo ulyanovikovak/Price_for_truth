@@ -51,7 +51,8 @@ class LogoutView(APIView):
 
 
 class UserUpdateView(APIView):
-    permission_classes = [permissions.IsAuthenticated]  # Только авторизованные пользователи
+    authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
+    permission_classes = [IsAuthenticated]  # Только авторизованные пользователи
 
     def put(self, request):
         user = request.user  # Берем текущего пользователя
