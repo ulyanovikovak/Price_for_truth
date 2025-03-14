@@ -156,3 +156,18 @@ body {
   cursor: pointer;
   font-size: 16px;
 }
+
+.edit-profile-button {
+  background-color: #5861e5;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.edit-profile-button:hover {
+  background-color: #4a54e1;
+}

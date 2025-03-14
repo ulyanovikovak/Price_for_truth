@@ -175,7 +175,6 @@ const ProfilePage = () => {
     <div className="profile-container">
       <div className="topbar">
         <h2>Профиль</h2>
-        <button onClick={() => setShowEditForm(true)} className="edit-button">Редактировать</button>
         <button onClick={() => logout()} className="logout-button">Выйти</button>
       </div>
       <div className="profile-header">
@@ -184,7 +183,8 @@ const ProfilePage = () => {
             <h2>{user.first_name} {user.last_name}</h2>
             <p>Имя пользователя: {user.username}</p>
             <p>Email: {user.email}</p>
-            <p>Телефон: {user.phone_number || "Не указан"}</p>
+            <p>Телефон: {user.м || "Не указан"}</p>
+            <button onClick={() => setShowEditForm(true)} className="edit-profile-button">Редактировать</button>
           </>
         ) : (
           <p>Загрузка...</p>
