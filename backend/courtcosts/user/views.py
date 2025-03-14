@@ -37,6 +37,7 @@ class LoginView(generics.GenericAPIView):
 
 
 class LogoutView(APIView):
+    authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -49,10 +50,25 @@ class LogoutView(APIView):
             return Response({"error": "error token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]  # Только авторизованные пользователи
+
+    def put(self, request):
+        user = request.user  # Берем текущего пользователя
+        serializer = UserSerializer(user, data=request.data, partial=True)  # Разрешаем частичное обновление
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CalculationCreateView(generics.CreateAPIView):
     queryset = Calculation.objects.all()
     serializer_class = CalculationSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Проверяет авторизацию пользователя
+    authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
+    permission_classes = [IsAuthenticated] # Проверяет авторизацию пользователя
 
     # Автоматически устанавливает текущего пользователя при создании Calculation
     def perform_create(self, serializer):
