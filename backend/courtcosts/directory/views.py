@@ -30,7 +30,6 @@ def price_id(request, spending_id):
         context = {
             'id': spending.id,
             'name': spending.name,  # Замените на реальные поля модели
-            'slug': spending.slug,  # Замените на реальные поля модели
             'description': spending.description,
             'price': spending.price,
             'date': spending.date,
@@ -55,7 +54,6 @@ def inflation_id(request, inflation_id):
         inflation = Inflation.objects.get(id=inflation_id)
         context = {
             'id': inflation.id,
-            'slug': inflation.slug,  # Замените на реальные поля модели
             'description': inflation.description,
             'percent': inflation.percent,
             'date': inflation.date,

@@ -44,14 +44,14 @@ class JWTSerializer(serializers.Serializer):
 class CalculationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calculation
-        fields = ['id', 'name', 'slug', 'description', 'sum', 'user']  # Поля, доступные в API
+        fields = ['id', 'name', 'description', 'sum', 'user']  # Поля, доступные в API
         read_only_fields = ['id', 'user']  # Поля, которые нельзя изменять через API
 
 
 class SpendingCalculationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpendingCalculation
-        fields = ['id', 'name', 'slug', 'description', 'price', 'date', 'category', 'calculation',
+        fields = ['id', 'name', 'description', 'price', 'date', 'category', 'calculation',
                   'inflation']  # Поля модели
         read_only_fields = ['id', 'calculation']  # ID создается автоматически
         inflation = serializers.PrimaryKeyRelatedField(required=False, allow_null=True,

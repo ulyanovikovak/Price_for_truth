@@ -3,7 +3,6 @@ from django.db import models
 
 class Categories(models.Model):
     name = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
 
     class Meta:
         db_table = 'category'
@@ -16,7 +15,6 @@ class Categories(models.Model):
 
 class Spending(models.Model):
     name = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     date = models.DateField()
@@ -33,7 +31,6 @@ class Spending(models.Model):
 
 class Inflation(models.Model):
     # name = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     percent = models.DecimalField(default=0.0, max_digits=3, decimal_places=2)
     date = models.DateField()

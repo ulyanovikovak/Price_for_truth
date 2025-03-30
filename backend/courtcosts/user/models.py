@@ -22,8 +22,6 @@ class User(AbstractUser):
 
 
 class Calculation(models.Model):
-    name = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     sum = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     user = models.ForeignKey(to=User, on_delete=models.PROTECT)
@@ -40,7 +38,6 @@ class Calculation(models.Model):
 
 class SpendingCalculation(models.Model):
     name = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     date = models.DateField()
