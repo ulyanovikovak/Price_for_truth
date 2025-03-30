@@ -11,7 +11,6 @@ const ProfilePage = () => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [newCalculation, setNewCalculation] = useState({
       name: "",
-      slug: "",
       description: "",
       sum: "",
     });
@@ -137,7 +136,7 @@ const ProfilePage = () => {
       return;
     }
 
-    if (!newCalculation.name || !newCalculation.slug || !newCalculation.description || !newCalculation.sum) {
+    if (!newCalculation.name || !newCalculation.description || !newCalculation.sum) {
       alert("Заполните все поля!");
       return;
     }
@@ -161,7 +160,7 @@ const ProfilePage = () => {
       const createdCalculation = await response.json();
       setCalculations([...calculations, createdCalculation]);
       setShowCreateForm(false);
-      setNewCalculation({ name: "", slug: "", description: "", sum: "" });
+      setNewCalculation({ name: "", description: "", sum: "" });
     } catch (err) {
       console.error("Error creating calculation:", err);
     }
@@ -183,7 +182,7 @@ const ProfilePage = () => {
             <h2>{user.first_name} {user.last_name}</h2>
             <p>Имя пользователя: {user.username}</p>
             <p>Email: {user.email}</p>
-            <p>Телефон: {user.м || "Не указан"}</p>
+            <p>Телефон: {user.phone_number || "Не указан"}</p>
             <button onClick={() => setShowEditForm(true)} className="edit-profile-button">Редактировать</button>
           </>
         ) : (
@@ -222,7 +221,6 @@ const ProfilePage = () => {
             <div className="modal-content">
               <h3>Создать новый расчет</h3>
               <input type="text" placeholder="Название" value={newCalculation.name} onChange={(e) => setNewCalculation({...newCalculation, name: e.target.value})} />
-              <input type="text" placeholder="Слаг" value={newCalculation.slug} onChange={(e) => setNewCalculation({...newCalculation, slug: e.target.value})} />
               <input type="text" placeholder="Описание" value={newCalculation.description} onChange={(e) => setNewCalculation({...newCalculation, description: e.target.value})} />
               <input type="number" placeholder="Сумма" value={newCalculation.sum} onChange={(e) => setNewCalculation({...newCalculation, sum: e.target.value})} />
               <div className="modal-buttons">
