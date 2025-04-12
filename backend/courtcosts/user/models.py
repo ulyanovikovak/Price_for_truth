@@ -57,6 +57,7 @@ class SpendingCalculation(models.Model):
     category = models.ForeignKey(to=UserCategories, on_delete=models.PROTECT)
     calculation = models.ForeignKey(to=Calculation, on_delete=models.PROTECT)
     inflation = models.ForeignKey(to=Inflation, on_delete=models.PROTECT)
+    withInflation = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'spendingCalculation'
