@@ -20,11 +20,13 @@ from django.urls import path
 # import sys
 # sys.path.append("directory")
 
-from .views import price, price_id, inflation, inflation_id
+from .views import price, price_id, inflation, inflation_id, categories, categories_id
 
 urlpatterns = [
     path('price/', price),
     path('price/<int:spending_id>/', price_id),
     path('inflation/', inflation),
-    path('inflation/<int:inflation_id>/', inflation_id)
+    path('inflation/<int:inflation_id>/', inflation_id),
+    path('categories/', categories),
+    path('categories/<int:category_id>/', categories_id),
 ]

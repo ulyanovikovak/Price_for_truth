@@ -51,8 +51,11 @@ class CalculationSerializer(serializers.ModelSerializer):
 class SpendingCalculationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpendingCalculation
-        fields = ['id', 'name', 'description', 'price', 'date', 'category', 'calculation',
-                  'inflation']  # Поля модели
-        read_only_fields = ['id', 'calculation']  # ID создается автоматически
-        inflation = serializers.PrimaryKeyRelatedField(required=False, allow_null=True,
-                                                       queryset=SpendingCalculation.objects.all())
+        fields = [
+            'id', 'name', 'description', 'price', 'date', 'category', 'calculation', 'withInflation'
+        ]
+        read_only_fields = ['id', 'calculation']
+
+
+
+

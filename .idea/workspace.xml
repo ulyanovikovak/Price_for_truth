@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="fix category">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="fix user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/migrations/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744027847479</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="fix user">
+      <option name="closed" value="true" />
+      <created>1744459635815</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1744459635815</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -181,6 +196,7 @@
     <MESSAGE value="fix update user profile" />
     <MESSAGE value="delete slug" />
     <MESSAGE value="fix category" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix category" />
+    <MESSAGE value="fix user" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix user" />
   </component>
 </project>

@@ -33,7 +33,7 @@ class Inflation(models.Model):
     # name = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True, null=True)
     percent = models.DecimalField(default=0.0, max_digits=3, decimal_places=2)
-    date = models.DateField()
+    year = models.IntegerField()
 
     # category = models.ForeignKey(to=Categories, on_delete=models.PROTECT)
 
@@ -43,6 +43,6 @@ class Inflation(models.Model):
         verbose_name_plural = 'inflation'
 
     def __str__(self):
-        return self.date
+        return self.year
 
 # Create your models here.

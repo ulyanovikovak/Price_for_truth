@@ -63,7 +63,7 @@ def inflation_id(request, inflation_id):
         return JsonResponse({'error': 'object not found'}, status=404)
 
 
-def category(request, category_id):
+def categories_id(request, category_id):
     try:
         spendings = list(Spending.objects.filter(category__id=category_id).values())
         context = {

@@ -1,5 +1,10 @@
 from rest_framework import generics, status, permissions
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from django.db.models import F, Case, When, FloatField, ExpressionWrapper
+
+from datetime import datetime
+from rest_framework.exceptions import ValidationError
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
@@ -10,6 +15,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Calculation, SpendingCalculation
 from .serializers import RegisterSerializer, LoginSerializer, JWTSerializer, UserSerializer, CalculationSerializer, \
     SpendingCalculationSerializer
+from directory.models import Inflation
 
 User = get_user_model()
 
@@ -86,23 +92,35 @@ class CalculationCreateView(generics.CreateAPIView):
 class SpendingCalculationCreateView(generics.CreateAPIView):
     queryset = SpendingCalculation.objects.all()
     serializer_class = SpendingCalculationSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Проверяет авторизацию пользователя
+    authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
+    permission_classes = [IsAuthenticated]  # Проверяет авторизацию пользователя
 
-    # Устанавливает Calculation из запроса
     def perform_create(self, serializer):
         calculation_id = self.request.data.get('calculation')
         try:
             calculation = Calculation.objects.get(id=calculation_id, user=self.request.user)
         except Calculation.DoesNotExist:
-            return Response({'error': 'Invalid calculation ID or not authorized'}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError({'calculation': 'Invalid calculation ID or not authorized'})
 
-        serializer.save(calculation=calculation)
+        # Получаем год из даты
+        date_str = self.request.data.get('date')
+        try:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except (TypeError, ValueError):
+            raise ValidationError({'date': 'Invalid or missing date format (expected YYYY-MM-DD)'})
 
-    # Переопределяем метод создания, чтобы добавить статус ответа
+        # Пытаемся найти инфляцию
+        inflation = Inflation.objects.filter(year=date.year).first()
+
+        if not inflation:
+            serializer.validated_data['withInflation'] = False
+            serializer.save(calculation=calculation)
+        else:
+            serializer.save(calculation=calculation, inflation=inflation)
+
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         return Response(response.data, status=status.HTTP_201_CREATED)
-
 
 class ProfileView(generics.RetrieveAPIView):
     authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
@@ -118,3 +136,36 @@ class ProfileView(generics.RetrieveAPIView):
             'calculations': CalculationSerializer(Calculation.objects.filter(user=user), many=True).data
         }
         return Response(user_data)
+
+
+class CalculationDetailView(APIView):
+    serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
+    def get(self, request, calculation_id: int):
+        calculation = get_object_or_404(Calculation, id=calculation_id)
+
+        # Аннотация с adjusted_price
+        spendings = SpendingCalculation.objects.filter(calculation=calculation).annotate(
+            adjusted_price=Case(
+                When(
+                    withInflation=True,
+                    then=ExpressionWrapper(
+                        F('price') * (1 + F('inflation__percent') / 100),
+                        output_field=FloatField()
+                    )
+                ),
+                default=F('price'),
+                output_field=FloatField()
+            )
+        )
+
+        calc_data = CalculationSerializer(calculation).data
+        spendings_data = SpendingCalculationSerializer(spendings, many=True).data
+
+        for obj, annotated in zip(spendings_data, spendings):
+            obj['adjusted_price'] = annotated.adjusted_price
+
+        return Response({
+            'calculation': calc_data,
+            'spendings': spendings_data
+        }, status=status.HTTP_200_OK)
