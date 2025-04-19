@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  BarChart,
-  Bar,
+  ComposedChart,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  LabelList,
+  Customized,
+  Layer,
 } from "recharts";
 import "../styles/CalculationDetailsPage.css";
 
@@ -19,28 +19,64 @@ const categoryColors = {
   "Другое": "#a4de6c",
 };
 
+// Компонент для отрисовки Gantt-блоков
+const renderGanttBars = ({ xAxisMap, yAxisMap, data }) => {
+  const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
+  const yAxis = yAxisMap[Object.keys(yAxisMap)[0]];
+
+  if (!xAxis || !yAxis || !data) return null;
+
+  return (
+    <Layer>
+      {data.map((entry, index) => {
+        const x1 = xAxis.scale(entry.start);
+        const x2 = xAxis.scale(entry.end);
+        const y = yAxis.scale(entry.name);
+        const height = 20;
+
+        if ([x1, x2, y].some((v) => isNaN(v))) return null;
+
+        const barY = y + (yAxis.bandwidth ? (yAxis.bandwidth() - height) / 2 : 0);
+        const width = Math.max(x2 - x1, 2);
+        const color = categoryColors[entry.category] || "#ccc";
+
+        return (
+          <rect
+            key={index}
+            x={x1}
+            y={barY}
+            width={width}
+            height={height}
+            fill={color}
+            rx={4}
+          />
+        );
+      })}
+    </Layer>
+  );
+};
+
 const CalculationDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [calculation, setCalculation] = useState(null);
   const [spendings, setSpendings] = useState([]);
-
   const [showCatalog, setShowCatalog] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [categorySpendings, setCategorySpendings] = useState([]);
-
   const [showCreateForm, setShowCreateForm] = useState(false);
+
   const [newSpending, setNewSpending] = useState({
     name: "",
     description: "",
     price: "",
-    date: "",
+    dateStart: "",
+    dateEnd: "",
     category: "",
     withInflation: false,
   });
-  const [spendingFromCatalog, setSpendingFromCatalog] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:8000/calculation/${id}/details/`)
@@ -74,16 +110,17 @@ const CalculationDetailsPage = () => {
       if (!res.ok) throw new Error("Ошибка при получении шаблона");
       const spending = await res.json();
 
+      const today = new Date().toISOString().slice(0, 10);
       setNewSpending({
         name: spending.name,
         description: spending.description || "",
         price: spending.price,
-        date: new Date().toISOString().slice(0, 10),
+        dateStart: today,
+        dateEnd: today,
         category: spending.category,
         withInflation: spending.withInflation || false,
       });
 
-      setSpendingFromCatalog(spending);
       setShowCreateForm(true);
     } catch (err) {
       console.error(err);
@@ -128,7 +165,8 @@ const CalculationDetailsPage = () => {
         name: "",
         description: "",
         price: "",
-        date: "",
+        dateStart: "",
+        dateEnd: "",
         category: "",
         withInflation: false,
       });
@@ -138,14 +176,26 @@ const CalculationDetailsPage = () => {
     }
   };
 
-  const ganttData = spendings.map((s, i) => ({
-    name: s.name || `Трата ${i + 1}`,
-    start: new Date(s.startDate || calculation.date).getTime(),
-    end: new Date(s.endDate || s.date || calculation.date).getTime(),
-    category: s.category || "Другое",
-    duration: 1,
-    adjusted_price: s.adjusted_price,
-  }));
+  const ganttData = spendings
+    .filter((s) => s.dateStart && s.dateEnd)
+    .map((s, i) => {
+      const start = new Date(s.dateStart).getTime();
+      const end = new Date(s.dateEnd).getTime();
+      return {
+        name: s.name?.trim() || `Трата ${i + 1}`,
+        start,
+        end,
+        category: s.category || "Другое",
+      };
+    });
+
+  const minDate = ganttData.length ? Math.min(...ganttData.map((d) => d.start)) : Date.now();
+  const maxDate = ganttData.length ? Math.max(...ganttData.map((d) => d.end)) : Date.now() + 86400000;
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${date.getDate()} ${date.toLocaleString("ru", { month: "short" })}`;
+  };
 
   return (
     <div className="calculation-container">
@@ -206,103 +256,59 @@ const CalculationDetailsPage = () => {
         <div className="modal">
           <div className="modal-content">
             <h4>Добавить свою трату</h4>
-            <input
-              type="text"
-              placeholder="Название"
-              value={newSpending.name}
-              onChange={(e) =>
-                setNewSpending({ ...newSpending, name: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Описание"
-              value={newSpending.description}
-              onChange={(e) =>
-                setNewSpending({ ...newSpending, description: e.target.value })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Сумма"
-              value={newSpending.price}
-              onChange={(e) =>
-                setNewSpending({ ...newSpending, price: e.target.value })
-              }
-            />
-            <input
-              type="date"
-              value={newSpending.date}
-              onChange={(e) =>
-                setNewSpending({ ...newSpending, date: e.target.value })
-              }
-            />
-            <select
-                value={newSpending.category}
-                onChange={(e) =>
-                setNewSpending({ ...newSpending, category: parseInt(e.target.value) })
-            }
-            >
+            <input type="text" placeholder="Название" value={newSpending.name} onChange={(e) => setNewSpending({ ...newSpending, name: e.target.value })} />
+            <input type="text" placeholder="Описание" value={newSpending.description} onChange={(e) => setNewSpending({ ...newSpending, description: e.target.value })} />
+            <input type="number" placeholder="Сумма" value={newSpending.price} onChange={(e) => setNewSpending({ ...newSpending, price: e.target.value })} />
+            <div className="date-range">
+              <input type="date" value={newSpending.dateStart} onChange={(e) => setNewSpending({ ...newSpending, dateStart: e.target.value })} />
+              <span>—</span>
+              <input type="date" value={newSpending.dateEnd} onChange={(e) => setNewSpending({ ...newSpending, dateEnd: e.target.value })} />
+            </div>
+            <select value={newSpending.category} onChange={(e) => setNewSpending({ ...newSpending, category: parseInt(e.target.value) })}>
               <option value="">Выберите категорию</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
             <label>
-              <input
-                type="checkbox"
-                checked={newSpending.withInflation}
-                onChange={(e) =>
-                  setNewSpending({
-                    ...newSpending,
-                    withInflation: e.target.checked,
-                  })
-                }
-              />
+              <input type="checkbox" checked={newSpending.withInflation} onChange={(e) => setNewSpending({ ...newSpending, withInflation: e.target.checked })} />
               Учитывать инфляцию
             </label>
             <div className="modal-buttons">
-              <button onClick={createSpending} className="save-button">
-                Создать
-              </button>
-              <button
-                onClick={() => setShowCreateForm(false)}
-                className="cancel-button"
-              >
-                Отмена
-              </button>
+              <button onClick={createSpending} className="save-button">Создать</button>
+              <button onClick={() => setShowCreateForm(false)} className="cancel-button">Отмена</button>
             </div>
           </div>
         </div>
       )}
 
-      <h3>Диаграмма трат</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={ganttData} layout="vertical">
-          <XAxis type="number" hide />
-          <YAxis dataKey="name" type="category" width={150} />
-          <Tooltip formatter={(value, name) => [`₽${value}`, name]} />
-          {Object.entries(categoryColors).map(([category, color]) => (
-            <Bar
-              key={category}
-              dataKey={(entry) =>
-                entry.category === category ? entry.adjusted_price : 0
-              }
-              fill={color}
-              stackId="1"
-              name={category}
+        <h3>Диаграмма трат</h3>
+        <div className="gantt-chart-wrapper">
+        <ResponsiveContainer width={1400} height={Math.max(300, ganttData.length * 50)}>
+            <ComposedChart
+            data={ganttData}
+            layout="vertical"
+            margin={{ top: 20, right: 30, left: 200, bottom: 20 }}
             >
-              <LabelList
-                dataKey="adjusted_price"
-                position="right"
-                formatter={(v) => `₽${v}`}
-              />
-            </Bar>
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
+            <XAxis
+                type="number"
+                domain={[minDate, maxDate]}
+                tickFormatter={formatDate}
+                scale="time"
+            />
+            <YAxis type="category" dataKey="name" width={180} />
+            <Tooltip
+                formatter={(value, name, props) => {
+                const start = new Date(props.payload.start);
+                const end = new Date(props.payload.end);
+                return [`${start.toLocaleDateString()} — ${end.toLocaleDateString()}`, "Период"];
+                }}
+            />
+            <Customized component={renderGanttBars} />
+            </ComposedChart>
+        </ResponsiveContainer>
+        </div>
+
 
       <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
     </div>
