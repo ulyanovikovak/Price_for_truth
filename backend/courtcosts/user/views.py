@@ -96,27 +96,40 @@ class SpendingCalculationCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]  # Проверяет авторизацию пользователя
 
     def perform_create(self, serializer):
+        # Получаем расчет
         calculation_id = self.request.data.get('calculation')
         try:
             calculation = Calculation.objects.get(id=calculation_id, user=self.request.user)
         except Calculation.DoesNotExist:
             raise ValidationError({'calculation': 'Invalid calculation ID or not authorized'})
 
-        # Получаем год из даты
-        date_str = self.request.data.get('date')
+        # Проверка даты начала
+        date_str_start = self.request.data.get('dateStart')
         try:
-            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            date_start = datetime.strptime(date_str_start, '%Y-%m-%d').date()
         except (TypeError, ValueError):
-            raise ValidationError({'date': 'Invalid or missing date format (expected YYYY-MM-DD)'})
+            raise ValidationError({'dateStart': 'Invalid or missing date format for dateStart (expected YYYY-MM-DD)'})
+
+        # Проверка даты конца
+        date_str_end = self.request.data.get('dateEnd')
+        if date_str_end:
+            try:
+                date_end = datetime.strptime(date_str_end, '%Y-%m-%d').date()
+            except (TypeError, ValueError):
+                raise ValidationError({'dateEnd': 'Invalid or missing date format for dateEnd (expected YYYY-MM-DD)'})
+        else:
+            date_end = date_start  # Если дата конца не указана, используем дату начала по умолчанию
+
 
         # Пытаемся найти инфляцию
-        inflation = Inflation.objects.filter(year=date.year).first()
+        inflation = Inflation.objects.filter(year=date_start.year).first()
 
+        # Если инфляция найдена, сохраняем инфляцию, иначе с флагом withoutInflation
         if not inflation:
             serializer.validated_data['withInflation'] = False
-            serializer.save(calculation=calculation)
+            serializer.save(calculation=calculation, dateStart=date_start, dateEnd=date_end)
         else:
-            serializer.save(calculation=calculation, inflation=inflation)
+            serializer.save(calculation=calculation, inflation=inflation, dateStart=date_start, dateEnd=date_end)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)

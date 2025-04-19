@@ -52,7 +52,7 @@ class SpendingCalculationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpendingCalculation
         fields = [
-            'id', 'name', 'description', 'price', 'date', 'category', 'calculation', 'withInflation'
+            'id', 'name', 'description', 'price', 'dateStart', 'dateEnd',  'category', 'calculation', 'withInflation'
         ]
         read_only_fields = ['id', 'calculation']
 
