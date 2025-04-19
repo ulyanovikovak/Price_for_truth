@@ -19,7 +19,6 @@ const categoryColors = {
   "Другое": "#a4de6c",
 };
 
-// Компонент для отрисовки Gantt-блоков
 const renderGanttBars = ({ xAxisMap, yAxisMap, data }) => {
   const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
   const yAxis = yAxisMap[Object.keys(yAxisMap)[0]];
@@ -199,58 +198,64 @@ const CalculationDetailsPage = () => {
 
   return (
     <div className="calculation-container">
-      <div className="navigation-buttons">
-        <button onClick={goBackToProfile}>← Назад в профиль</button>
-        <button onClick={handleLogout} style={{ marginLeft: "10px" }}>Выйти</button>
+      <div className="top-bar">
+        <div className="navigation-buttons">
+          <button onClick={goBackToProfile}>← Назад в профиль</button>
+          <button onClick={handleLogout}>Выйти</button>
+        </div>
+
+        <div className="catalog-wrapper">
+          <button onClick={() => setShowCatalog(!showCatalog)} className="catalog-toggle">
+            {showCatalog ? "Скрыть справочник" : "Открыть справочник"}
+          </button>
+        </div>
       </div>
 
-      <h2 className="gantt-header">Расчёт: {calculation?.name || `#${id}`}</h2>
-
-      <button onClick={() => setShowCatalog(!showCatalog)} className="catalog-toggle">
-        {showCatalog ? "Скрыть справочник" : "Открыть справочник"}
-      </button>
-
       {showCatalog && (
-        <div className="catalog-dropdown">
-          <h4>Категории:</h4>
-          <ul className="category-list">
-            {categories.map((cat) => (
-              <li
-                key={cat.id}
-                onClick={() => handleCategoryClick(cat.id)}
-                className={selectedCategoryId === cat.id ? "active" : ""}
-              >
-                {cat.name}
-              </li>
-            ))}
-          </ul>
+        <div className="catalog-overlay" onClick={() => setShowCatalog(false)}>
+          <div className="catalog-modal" onClick={(e) => e.stopPropagation()}>
+            <h4>Категории:</h4>
+            <ul className="category-list">
+              {categories.map((cat) => (
+                <li
+                  key={cat.id}
+                  onClick={() => handleCategoryClick(cat.id)}
+                  className={selectedCategoryId === cat.id ? "active" : ""}
+                >
+                  {cat.name}
+                </li>
+              ))}
+            </ul>
 
-          <button className="create-spending-button" onClick={() => setShowCreateForm(true)}>
-            ➕ Своя трата
-          </button>
+            <button className="create-spending-button" onClick={() => setShowCreateForm(true)}>
+              ➕ Своя трата
+            </button>
 
-          {selectedCategoryId && (
-            <div className="category-spendings">
-              <h5>Траты по категории:</h5>
-              {categorySpendings.length > 0 ? (
-                <ul>
-                  {categorySpendings.map((s) => (
-                    <li
-                      key={s.id}
-                      onClick={() => handleSpendingTemplateClick(s.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {s.name || "Без названия"} — ₽{s.adjusted_price || s.price}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Нет данных по этой категории.</p>
-              )}
-            </div>
-          )}
+            {selectedCategoryId && (
+              <div className="category-spendings">
+                <h5>Траты по категории:</h5>
+                {categorySpendings.length > 0 ? (
+                  <ul>
+                    {categorySpendings.map((s) => (
+                      <li
+                        key={s.id}
+                        onClick={() => handleSpendingTemplateClick(s.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {s.name || "Без названия"} — ₽{s.adjusted_price || s.price}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Нет данных по этой категории.</p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
+
+      <h2 className="gantt-header">Расчёт: {calculation?.name || `#${id}`}</h2>
 
       {showCreateForm && (
         <div className="modal">
@@ -282,33 +287,32 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
-        <h3>Диаграмма трат</h3>
-        <div className="gantt-chart-wrapper">
+      <h3>Диаграмма трат</h3>
+      <div className="gantt-chart-wrapper">
         <ResponsiveContainer width={1400} height={Math.max(300, ganttData.length * 50)}>
-            <ComposedChart
+          <ComposedChart
             data={ganttData}
             layout="vertical"
             margin={{ top: 20, right: 30, left: 200, bottom: 20 }}
-            >
+          >
             <XAxis
-                type="number"
-                domain={[minDate, maxDate]}
-                tickFormatter={formatDate}
-                scale="time"
+              type="number"
+              domain={[minDate, maxDate]}
+              tickFormatter={formatDate}
+              scale="time"
             />
             <YAxis type="category" dataKey="name" width={180} />
             <Tooltip
-                formatter={(value, name, props) => {
+              formatter={(value, name, props) => {
                 const start = new Date(props.payload.start);
                 const end = new Date(props.payload.end);
                 return [`${start.toLocaleDateString()} — ${end.toLocaleDateString()}`, "Период"];
-                }}
+              }}
             />
             <Customized component={renderGanttBars} />
-            </ComposedChart>
+          </ComposedChart>
         </ResponsiveContainer>
-        </div>
-
+      </div>
 
       <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
     </div>

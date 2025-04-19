@@ -20,12 +20,18 @@ html, body {
     overflow-x: hidden;
   }
   
-  /* Верхние кнопки */
+  /* Верхняя панель */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  /* Кнопки "Назад" и "Выйти" */
   .navigation-buttons {
     display: flex;
-    justify-content: flex-end;
     gap: 12px;
-    margin-bottom: 20px;
   }
   
   .navigation-buttons button {
@@ -53,10 +59,14 @@ html, body {
     gap: 20px;
   }
   
-  /* Кнопка "Открыть справочник" */
+  /* Кнопка открытия справочника */
+  .catalog-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
   .catalog-toggle {
-    width: 100%;
-    margin-top: 10px;
     padding: 12px 20px;
     background-color: #3f51b5;
     color: white;
@@ -64,22 +74,35 @@ html, body {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    width: auto;
   }
   
   .catalog-toggle:hover {
     background-color: #2c387e;
   }
   
-  /* Блок со справочником */
-  .catalog-dropdown {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 20px;
+  /* Затемнение под модальным справочником */
+  .catalog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  
+  /* Модальное окно справочника */
+  .catalog-modal {
+    width: 320px;
+    background-color: #fff;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
   }
   
   /* Категории */
@@ -116,7 +139,7 @@ html, body {
     margin-left: 20px;
   }
   
-  /* Кнопка добавления */
+  /* Кнопка добавления траты */
   .create-spending-button {
     margin-top: 12px;
     padding: 10px 14px;
@@ -132,7 +155,7 @@ html, body {
     background-color: #388e3c;
   }
   
-  /* Модалка */
+  /* Модалка для создания траты */
   .modal {
     position: fixed;
     top: 0;
