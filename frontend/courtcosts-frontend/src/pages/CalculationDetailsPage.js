@@ -106,7 +106,7 @@ const CalculationDetailsPage = () => {
 
   const handleSpendingTemplateClick = async (spendingId) => {
     try {
-      const res = await fetch(`http://localhost:8000/price/${spendingId}/`);
+      const res = await fetch(`http://localhost:8000/catalog/price/${spendingId}/`);
       if (!res.ok) throw new Error("Ошибка при получении шаблона");
       const spending = await res.json();
 
