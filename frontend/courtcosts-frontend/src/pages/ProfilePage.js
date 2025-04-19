@@ -234,7 +234,18 @@ const ProfilePage = () => {
         <div className="calculations-list">
           {filteredCalculations.length > 0 ? (
             filteredCalculations.map((calc) => (
-              <div key={calc.id} className="calculation-card">
+              // <div key={calc.id} className="calculation-card">
+              //   <h4>{calc.name}</h4>
+              //   <p>{calc.description}</p>
+              //   <p>Сумма: {calc.sum}</p>
+              // </div>
+
+              <div
+                key={calc.id}
+                className="calculation-card"
+                onClick={() => navigate(`/calculation/${calc.id}`)}
+                style={{ cursor: "pointer" }}
+              >
                 <h4>{calc.name}</h4>
                 <p>{calc.description}</p>
                 <p>Сумма: {calc.sum}</p>
