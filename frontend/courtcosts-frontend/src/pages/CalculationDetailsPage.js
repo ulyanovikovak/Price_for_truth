@@ -10,6 +10,8 @@ import {
   Layer,
 } from "recharts";
 import "../styles/CalculationDetailsPage.css";
+import GanttChart from "../components/GanttChart";
+
 
 const categoryColors = {
   "Госпошлина": "#8884d8",
@@ -287,32 +289,9 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
-      <h3>Диаграмма трат</h3>
-      <div className="gantt-chart-wrapper">
-        <ResponsiveContainer width={1400} height={Math.max(300, ganttData.length * 50)}>
-          <ComposedChart
-            data={ganttData}
-            layout="vertical"
-            margin={{ top: 20, right: 30, left: 200, bottom: 20 }}
-          >
-            <XAxis
-              type="number"
-              domain={[minDate, maxDate]}
-              tickFormatter={formatDate}
-              scale="time"
-            />
-            <YAxis type="category" dataKey="name" width={180} />
-            <Tooltip
-              formatter={(value, name, props) => {
-                const start = new Date(props.payload.start);
-                const end = new Date(props.payload.end);
-                return [`${start.toLocaleDateString()} — ${end.toLocaleDateString()}`, "Период"];
-              }}
-            />
-            <Customized component={renderGanttBars} />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
+        <h3>Диаграмма трат</h3>
+        <GanttChart spendings={spendings} />
+
 
       <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
     </div>

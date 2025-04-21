@@ -1,0 +1,16 @@
+.gantt-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    height: 500px;
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  .gantt-inner {
+    min-width: 1000px;
+  }
+  
+  body {
+    overflow: auto !important;
+  }
+  
