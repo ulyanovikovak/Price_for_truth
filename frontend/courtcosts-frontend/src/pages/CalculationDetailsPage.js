@@ -1,61 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  ComposedChart,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Customized,
-  Layer,
-} from "recharts";
 import "../styles/CalculationDetailsPage.css";
 import GanttChart from "../components/GanttChart";
 
 
-const categoryColors = {
-  "Госпошлина": "#8884d8",
-  "Экспертиза": "#82ca9d",
-  "Почта": "#ffc658",
-  "Представительство": "#d08484",
-  "Другое": "#a4de6c",
-};
-
-const renderGanttBars = ({ xAxisMap, yAxisMap, data }) => {
-  const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
-  const yAxis = yAxisMap[Object.keys(yAxisMap)[0]];
-
-  if (!xAxis || !yAxis || !data) return null;
-
-  return (
-    <Layer>
-      {data.map((entry, index) => {
-        const x1 = xAxis.scale(entry.start);
-        const x2 = xAxis.scale(entry.end);
-        const y = yAxis.scale(entry.name);
-        const height = 20;
-
-        if ([x1, x2, y].some((v) => isNaN(v))) return null;
-
-        const barY = y + (yAxis.bandwidth ? (yAxis.bandwidth() - height) / 2 : 0);
-        const width = Math.max(x2 - x1, 2);
-        const color = categoryColors[entry.category] || "#ccc";
-
-        return (
-          <rect
-            key={index}
-            x={x1}
-            y={barY}
-            width={width}
-            height={height}
-            fill={color}
-            rx={4}
-          />
-        );
-      })}
-    </Layer>
-  );
-};
 
 const CalculationDetailsPage = () => {
   const { id } = useParams();
@@ -177,27 +125,6 @@ const CalculationDetailsPage = () => {
     }
   };
 
-  const ganttData = spendings
-    .filter((s) => s.dateStart && s.dateEnd)
-    .map((s, i) => {
-      const start = new Date(s.dateStart).getTime();
-      const end = new Date(s.dateEnd).getTime();
-      return {
-        name: s.name?.trim() || `Трата ${i + 1}`,
-        start,
-        end,
-        category: s.category || "Другое",
-      };
-    });
-
-  const minDate = ganttData.length ? Math.min(...ganttData.map((d) => d.start)) : Date.now();
-  const maxDate = ganttData.length ? Math.max(...ganttData.map((d) => d.end)) : Date.now() + 86400000;
-
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    return `${date.getDate()} ${date.toLocaleString("ru", { month: "short" })}`;
-  };
-
   return (
     <div className="calculation-container">
       <div className="top-bar">
@@ -289,10 +216,8 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
-        <h3>Диаграмма трат</h3>
-        <GanttChart spendings={spendings} />
-
-
+      <h3>Диаграмма трат</h3>
+      <GanttChart spendings={spendings} />
       <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
     </div>
   );
