@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Gantt, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import "../styles/Gantt.css";
@@ -34,6 +34,9 @@ const CustomTooltipContent = ({ task }) => {
 const GanttChart = ({ spendings, onSpendingClick }) => {
   const [categoryMap, setCategoryMap] = useState({});
   const [sortBy, setSortBy] = useState("dateStart");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const sortOptions = [
     { value: "dateStart", label: "По дате начала" },
@@ -54,24 +57,33 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
           };
         }
         setCategoryMap(map);
+        setSelectedCategories(data.category.map((c) => c.id));
       });
   }, []);
 
-  const sortedSpendings = [...spendings].sort((a, b) => {
-    if (sortBy === "dateStart") {
-      return new Date(a.dateStart) - new Date(b.dateStart);
-    }
-    if (sortBy === "name") {
-      return (a.name || "").localeCompare(b.name || "");
-    }
-    if (sortBy === "category") {
+  // Закрытие меню по клику вне
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filteredSpendings = spendings.filter((s) =>
+    selectedCategories.includes(s.category)
+  );
+
+  const sortedSpendings = [...filteredSpendings].sort((a, b) => {
+    if (sortBy === "dateStart") return new Date(a.dateStart) - new Date(b.dateStart);
+    if (sortBy === "name") return (a.name || "").localeCompare(b.name || "");
+    if (sortBy === "category")
       return (categoryMap[a.category]?.name || "").localeCompare(
         categoryMap[b.category]?.name || ""
       );
-    }
-    if (sortBy === "price") {
-      return (a.price || 0) - (b.price || 0);
-    }
+    if (sortBy === "price") return (a.price || 0) - (b.price || 0);
     return 0;
   });
 
@@ -125,6 +137,38 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
             </option>
           ))}
         </select>
+
+        <div className="category-filter" ref={dropdownRef}>
+          <div
+            className="category-filter-toggle"
+            onClick={() => setDropdownOpen((prev) => !prev)}
+          >
+            Категории ({selectedCategories.length})
+            <span className="arrow">{dropdownOpen ? "▲" : "▼"}</span>
+          </div>
+          {dropdownOpen && (
+            <div className="category-dropdown">
+              {Object.entries(categoryMap).map(([id, { name }]) => (
+                <label key={id} className="category-option">
+                  <input
+                    type="checkbox"
+                    value={id}
+                    checked={selectedCategories.includes(Number(id))}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      setSelectedCategories((prev) =>
+                        e.target.checked
+                          ? [...prev, value]
+                          : prev.filter((catId) => catId !== value)
+                      );
+                    }}
+                  />
+                  {name}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="gantt-inner">
