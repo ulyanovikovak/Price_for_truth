@@ -199,6 +199,9 @@ const CalculationDetailsPage = () => {
     }
   };
 
+  const totalSpending = spendings.reduce((acc, s) => acc + parseFloat(s.price || 0), 0);
+
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh_token");
@@ -345,6 +348,7 @@ const CalculationDetailsPage = () => {
       <h3>Диаграмма трат</h3>
       <GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
       <div className="gantt-total">Сумма иска: ₽{calculation?.sum}</div>
+      <div className="gantt-total">Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}</div>
     </div>
   );
 };
