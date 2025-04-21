@@ -249,3 +249,22 @@ html, body {
     font-weight: bold;
   }
   
+  .gantt-header-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+
+  .gantt-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* расстояние между заголовком и кнопкой */
+    margin-bottom: 10px;
+  }
+  
+  .gantt-title {
+    margin: 0;
+  }
+  

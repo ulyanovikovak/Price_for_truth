@@ -416,12 +416,16 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
-      <h3>Диаграмма трат</h3>
-      <GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
+<div className="gantt-title-wrapper">
+  <h3 className="gantt-title">Диаграмма трат</h3>
+  <button onClick={generatePDFWithPdfMake} className="catalog-toggle">
+    Скачать PDF-отчёт
+  </button>
+</div>
 
-      <button onClick={generatePDFWithPdfMake} className="report-button">
-        Скачать PDF-отчёт
-        </button>
+
+<GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
+
 
 
       <div className="gantt-total">Сумма иска: ₽{calculation?.sum}</div>
