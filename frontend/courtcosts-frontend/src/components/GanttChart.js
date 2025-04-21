@@ -33,6 +33,14 @@ const CustomTooltipContent = ({ task }) => {
 
 const GanttChart = ({ spendings, onSpendingClick }) => {
   const [categoryMap, setCategoryMap] = useState({});
+  const [sortBy, setSortBy] = useState("dateStart");
+
+  const sortOptions = [
+    { value: "dateStart", label: "По дате начала" },
+    { value: "name", label: "По названию" },
+    { value: "category", label: "По категории" },
+    { value: "price", label: "По сумме траты" },
+  ];
 
   useEffect(() => {
     fetch("http://localhost:8000/catalog/categories/")
@@ -49,7 +57,25 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
       });
   }, []);
 
-  const tasks = spendings
+  const sortedSpendings = [...spendings].sort((a, b) => {
+    if (sortBy === "dateStart") {
+      return new Date(a.dateStart) - new Date(b.dateStart);
+    }
+    if (sortBy === "name") {
+      return (a.name || "").localeCompare(b.name || "");
+    }
+    if (sortBy === "category") {
+      return (categoryMap[a.category]?.name || "").localeCompare(
+        categoryMap[b.category]?.name || ""
+      );
+    }
+    if (sortBy === "price") {
+      return (a.price || 0) - (b.price || 0);
+    }
+    return 0;
+  });
+
+  const tasks = sortedSpendings
     .map((s, i) => {
       const start = new Date(s.dateStart);
       const end = new Date(s.dateEnd);
@@ -78,15 +104,29 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
     })
     .filter((t) => t && t.start && t.end);
 
-  // Диапазон отображения — текущий год + 2 года вперёд
   const today = new Date();
-  const startDate = new Date(today.getFullYear(), 0, 1); // Январь текущего года
-  const endDate = new Date(today.getFullYear() + 3, 0, 1); // Январь через два года
+  const startDate = new Date(today.getFullYear(), 0, 1);
+  const endDate = new Date(today.getFullYear() + 3, 0, 1);
 
   if (Object.keys(categoryMap).length === 0) return <div>Загрузка категорий...</div>;
 
   return (
     <div className="gantt-wrapper">
+      <div className="sort-bar">
+        <label htmlFor="sortBy">Сортировать:</label>
+        <select
+          id="sortBy"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          {sortOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="gantt-inner">
         {tasks.length > 0 ? (
           <Gantt
