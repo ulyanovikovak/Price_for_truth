@@ -76,7 +76,12 @@ const GanttChart = ({ spendings }) => {
         },
       };
     })
-    .filter((t) => t && t.start && t.end); // ← фильтрация
+    .filter((t) => t && t.start && t.end);
+
+  // Диапазон отображения — текущий год + 2 года вперёд
+  const today = new Date();
+  const startDate = new Date(today.getFullYear(), 0, 1); // Январь текущего года
+  const endDate = new Date(today.getFullYear() + 3, 0, 1); // Январь через два года
 
   if (Object.keys(categoryMap).length === 0) return <div>Загрузка категорий...</div>;
 
@@ -90,6 +95,8 @@ const GanttChart = ({ spendings }) => {
             listCellWidth="155px"
             TooltipContent={CustomTooltipContent}
             locale={ru}
+            startDate={startDate}
+            endDate={endDate}
           />
         ) : (
           <div style={{ padding: "1rem", fontSize: "16px" }}>
@@ -99,7 +106,6 @@ const GanttChart = ({ spendings }) => {
       </div>
     </div>
   );
-  
 };
 
 export default GanttChart;
