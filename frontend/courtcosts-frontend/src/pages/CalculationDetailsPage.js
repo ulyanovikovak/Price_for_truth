@@ -428,8 +428,14 @@ const CalculationDetailsPage = () => {
 
 
 
-      <div className="gantt-total">Сумма иска: ₽{calculation?.sum}</div>
-      <div className="gantt-total">Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}</div>
+<div className="gantt-total">
+  Сумма расходов: ₽{Number(totalSpending).toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
+</div>
+
+<div className="gantt-total">
+  Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
+</div>
+
     </div>
   );
 };
