@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Gantt, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import "../styles/Gantt.css";
+import { ru } from "date-fns/locale";
 
 // Генерация уникального цвета из строки
 const stringToColor = (str) => {
@@ -11,6 +12,23 @@ const stringToColor = (str) => {
   }
   const hue = Math.abs(hash) % 360;
   return `hsl(${hue}, 50%, 65%)`;
+};
+
+// Кастомный tooltip-компонент
+const CustomTooltipContent = ({ task }) => {
+  if (!task?.start || !task?.end) return null;
+
+  const start = task.start.toLocaleDateString("ru-RU");
+  const end = task.end.toLocaleDateString("ru-RU");
+  const duration = Math.ceil((+task.end - +task.start) / (1000 * 60 * 60 * 24));
+
+  return (
+    <div className="custom-tooltip">
+      <b>{task.name}</b>: {start} - {end}
+      <div>Длительность: {duration} дн.</div>
+      <div>Стоимость: {Number(task.price).toFixed(2)} ₽</div>
+    </div>
+  );
 };
 
 const GanttChart = ({ spendings }) => {
@@ -32,11 +50,12 @@ const GanttChart = ({ spendings }) => {
   }, []);
 
   const tasks = spendings
-    .filter((s) => s.dateStart && s.dateEnd)
     .map((s, i) => {
       const start = new Date(s.dateStart);
       const end = new Date(s.dateEnd);
-      if (isNaN(start) || isNaN(end)) return null;
+      if (!s.dateStart || !s.dateEnd || isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return null;
+      }
 
       const categoryInfo = categoryMap[s.category] || { name: "Другое", color: "#ccc" };
 
@@ -48,6 +67,7 @@ const GanttChart = ({ spendings }) => {
         type: "task",
         progress: 100,
         isDisabled: true,
+        price: s.price,
         styles: {
           backgroundColor: categoryInfo.color,
           backgroundSelectedColor: categoryInfo.color,
@@ -56,17 +76,30 @@ const GanttChart = ({ spendings }) => {
         },
       };
     })
-    .filter(Boolean);
+    .filter((t) => t && t.start && t.end); // ← фильтрация
 
   if (Object.keys(categoryMap).length === 0) return <div>Загрузка категорий...</div>;
 
   return (
     <div className="gantt-wrapper">
       <div className="gantt-inner">
-        <Gantt tasks={tasks} viewMode={ViewMode.Month} listCellWidth="155px" />
+        {tasks.length > 0 ? (
+          <Gantt
+            tasks={tasks}
+            viewMode={ViewMode.Month}
+            listCellWidth="155px"
+            TooltipContent={CustomTooltipContent}
+            locale={ru}
+          />
+        ) : (
+          <div style={{ padding: "1rem", fontSize: "16px" }}>
+            Нет данных для отображения
+          </div>
+        )}
       </div>
     </div>
   );
+  
 };
 
 export default GanttChart;
