@@ -17,7 +17,6 @@ class Spending(models.Model):
     name = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
-    date = models.DateField()
     category = models.ForeignKey(to=Categories, on_delete=models.PROTECT)
 
     class Meta:

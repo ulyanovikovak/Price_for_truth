@@ -32,7 +32,6 @@ def price_id(request, spending_id):
             'name': spending.name,  # Замените на реальные поля модели
             'description': spending.description,
             'price': spending.price,
-            'date': spending.date,
             'category': spending.category.name if spending.category else None,
         }
         return JsonResponse(context)
@@ -56,7 +55,6 @@ def inflation_id(request, inflation_id):
             'id': inflation.id,
             'description': inflation.description,
             'percent': inflation.percent,
-            'date': inflation.date,
         }
         return JsonResponse(context)
     except Spending.DoesNotExist:
