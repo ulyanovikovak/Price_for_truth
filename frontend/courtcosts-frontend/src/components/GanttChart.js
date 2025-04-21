@@ -31,7 +31,7 @@ const CustomTooltipContent = ({ task }) => {
   );
 };
 
-const GanttChart = ({ spendings }) => {
+const GanttChart = ({ spendings, onSpendingClick }) => {
   const [categoryMap, setCategoryMap] = useState({});
 
   useEffect(() => {
@@ -97,6 +97,7 @@ const GanttChart = ({ spendings }) => {
             locale={ru}
             startDate={startDate}
             endDate={endDate}
+            onSelect={(task) => onSpendingClick && onSpendingClick(task.id)}
           />
         ) : (
           <div style={{ padding: "1rem", fontSize: "16px" }}>

@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import "../styles/CalculationDetailsPage.css";
 import GanttChart from "../components/GanttChart";
 
-
-
 const CalculationDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,6 +14,7 @@ const CalculationDetailsPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [categorySpendings, setCategorySpendings] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingSpending, setEditingSpending] = useState(null);
 
   const [newSpending, setNewSpending] = useState({
     name: "",
@@ -55,7 +54,13 @@ const CalculationDetailsPage = () => {
 
   const handleSpendingTemplateClick = async (spendingId) => {
     try {
-      const res = await fetch(`http://localhost:8000/catalog/price/${spendingId}/`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:8000/spendings/${spending.id}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
       if (!res.ok) throw new Error("Ошибка при получении шаблона");
       const spending = await res.json();
 
@@ -77,14 +82,83 @@ const CalculationDetailsPage = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh_token");
-    navigate("/login");
+  const handleSpendingClick = async (taskId) => {
+    const spending = spendings[parseInt(taskId)];
+    if (!spending) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    try {
+      // Гарантируем, что категории загружены
+      if (categories.length === 0) {
+        const catRes = await fetch("http://localhost:8000/catalog/categories/");
+        const catData = await catRes.json();
+        setCategories(catData.category);
+      }
+  
+      // Загружаем трату
+      const res = await fetch(`http://localhost:8000/spendings/${spending.id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+  
+      // Приводим category к числу, чтобы совпало с value
+      if (typeof data.category === "string") {
+        data.category = parseInt(data.category);
+      }
+  
+      setEditingSpending(data);
+    } catch (err) {
+      console.error(err);
+      alert("Не удалось загрузить трату");
+    }
+  };
+  
+
+  const updateSpending = async () => {
+    const token = localStorage.getItem("token");
+    if (!token || !editingSpending?.id) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/spendings/${editingSpending.id}/`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editingSpending),
+      });
+      if (!res.ok) throw new Error();
+      const updated = await res.json();
+      setSpendings(spendings.map((s) => (s.id === updated.id ? updated : s)));
+      setEditingSpending(null);
+    } catch {
+      alert("Не удалось обновить трату");
+    }
   };
 
-  const goBackToProfile = () => {
-    navigate("/profile");
+  const deleteSpending = async () => {
+    const token = localStorage.getItem("token");
+    if (!token || !editingSpending?.id) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/spendings/${editingSpending.id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error();
+      setSpendings(spendings.filter((s) => s.id !== editingSpending.id));
+      setEditingSpending(null);
+    } catch {
+      alert("Не удалось удалить трату");
+    }
   };
 
   const createSpending = async () => {
@@ -123,6 +197,16 @@ const CalculationDetailsPage = () => {
       console.error(err);
       alert("Не удалось создать трату");
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    navigate("/login");
+  };
+
+  const goBackToProfile = () => {
+    navigate("/profile");
   };
 
   return (
@@ -216,8 +300,50 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
+      {editingSpending && (
+        <div className="modal">
+          <div className="modal-content">
+            <h4>Редактировать трату</h4>
+            <input type="text" value={editingSpending.name} onChange={(e) => setEditingSpending({ ...editingSpending, name: e.target.value })} />
+            <input type="text" value={editingSpending.description} onChange={(e) => setEditingSpending({ ...editingSpending, description: e.target.value })} />
+            <input type="number" value={editingSpending.price} onChange={(e) => setEditingSpending({ ...editingSpending, price: e.target.value })} />
+            <div className="date-range">
+              <input type="date" value={editingSpending.dateStart} onChange={(e) => setEditingSpending({ ...editingSpending, dateStart: e.target.value })} />
+              <span>—</span>
+              <input type="date" value={editingSpending.dateEnd} onChange={(e) => setEditingSpending({ ...editingSpending, dateEnd: e.target.value })} />
+            </div>
+            <select
+                value={editingSpending.category ?? ""}
+                onChange={(e) =>
+                    setEditingSpending({
+                    ...editingSpending,
+                    category: parseInt(e.target.value),
+                    })
+                }
+                >
+                <option value="">Выберите категорию</option>
+                {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                    {c.name}
+                    </option>
+                ))}
+                </select>
+
+            <label>
+              <input type="checkbox" checked={editingSpending.withInflation} onChange={(e) => setEditingSpending({ ...editingSpending, withInflation: e.target.checked })} />
+              Учитывать инфляцию
+            </label>
+            <div className="modal-buttons">
+              <button onClick={updateSpending} className="save-button">Сохранить</button>
+              <button onClick={deleteSpending} className="cancel-button">Удалить</button>
+              <button onClick={() => setEditingSpending(null)} className="cancel-button">Отмена</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <h3>Диаграмма трат</h3>
-      <GanttChart spendings={spendings} />
+      <GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
       <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
     </div>
   );
