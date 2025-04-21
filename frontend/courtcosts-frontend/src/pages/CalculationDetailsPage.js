@@ -3,6 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import "../styles/CalculationDetailsPage.css";
 import GanttChart from "../components/GanttChart";
 
+
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.vfs;
+
+
 const CalculationDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -202,6 +209,70 @@ const CalculationDetailsPage = () => {
   const totalSpending = spendings.reduce((acc, s) => acc + parseFloat(s.price || 0), 0);
 
 
+
+  
+  const generatePDFWithPdfMake = async () => {
+    // если категории не загружены — загружаем
+    if (categories.length === 0) {
+      try {
+        const res = await fetch("http://localhost:8000/catalog/categories/");
+        const data = await res.json();
+        setCategories(data.category);
+        // ждём установки и повторяем вызов
+        setTimeout(generatePDFWithPdfMake, 100); // повторный вызов с задержкой
+        return;
+      } catch (err) {
+        alert("Не удалось загрузить категории для отчёта");
+        return;
+      }
+    }
+  
+    const tableBody = [
+      ["Название траты", "Категория", "Сумма"],
+      ...spendings.map((s) => {
+        const categoryName = categories.find((c) => c.id === s.category)?.name || "—";
+        return [
+          s.name || "—",
+          categoryName,
+          `${parseFloat(s.price || 0).toFixed(2)} ₽`,
+        ];
+      }),
+      [
+        { text: "Итого", colSpan: 2, alignment: "right", bold: true },
+        {},
+        { text: `${totalSpending.toFixed(2)} ₽`, bold: true },
+      ],
+    ];
+  
+    const docDefinition = {
+      content: [
+        {
+          text: `Отчёт по расчёту: ${calculation?.name || `#${id}`}`,
+          fontSize: 16,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["*", "*", "auto"],
+            body: tableBody,
+          },
+        },
+      ],
+      defaultStyle: {
+        font: "Roboto",
+      },
+    };
+  
+    pdfMake.createPdf(docDefinition).download(`расчет_${id}_отчет.pdf`);
+  };
+  
+  
+
+
+
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh_token");
@@ -347,6 +418,12 @@ const CalculationDetailsPage = () => {
 
       <h3>Диаграмма трат</h3>
       <GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
+
+      <button onClick={generatePDFWithPdfMake} className="report-button">
+        Скачать PDF-отчёт
+        </button>
+
+
       <div className="gantt-total">Сумма иска: ₽{calculation?.sum}</div>
       <div className="gantt-total">Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}</div>
     </div>
