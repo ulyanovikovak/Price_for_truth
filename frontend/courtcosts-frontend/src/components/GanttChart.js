@@ -61,7 +61,6 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
       });
   }, []);
 
-  // Закрытие меню по клику вне
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -148,6 +147,19 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
           </div>
           {dropdownOpen && (
             <div className="category-dropdown">
+              <div className="category-actions">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSelectedCategories(Object.keys(categoryMap).map((id) => Number(id)))
+                  }
+                >
+                  Выбрать все
+                </button>
+                <button type="button" onClick={() => setSelectedCategories([])}>
+                  Очистить
+                </button>
+              </div>
               {Object.entries(categoryMap).map(([id, { name }]) => (
                 <label key={id} className="category-option">
                   <input
