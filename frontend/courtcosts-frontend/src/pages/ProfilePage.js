@@ -173,9 +173,12 @@ const ProfilePage = () => {
   return (
     <div className="profile-container">
       <div className="topbar">
-        <h2>Профиль</h2>
-        <button onClick={() => logout()} className="logout-button">Выйти</button>
-      </div>
+  <div className="topbar-inner">
+    <h2 className="topbar-title">Профиль</h2>
+    <button onClick={logout} className="logout-button">Выйти</button>
+  </div>
+</div>
+
       <div className="profile-header">
         {user ? (
           <>
