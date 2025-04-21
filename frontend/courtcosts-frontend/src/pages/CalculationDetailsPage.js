@@ -344,7 +344,7 @@ const CalculationDetailsPage = () => {
 
       <h3>Диаграмма трат</h3>
       <GanttChart spendings={spendings} onSpendingClick={handleSpendingClick} />
-      <div className="gantt-total">Сумма иска: ₽{calculation?.amount}</div>
+      <div className="gantt-total">Сумма иска: ₽{calculation?.sum}</div>
     </div>
   );
 };
