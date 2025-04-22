@@ -243,21 +243,35 @@ const CalculationDetailsPage = () => {
     }
   
     const tableBody = [
-      ["Название траты", "Категория", "Сумма"],
+      ["Название траты", "Категория", "Сумма", "Сумма возврата"],
       ...spendings.map((s) => {
+        const price = parseFloat(s.price || 0);
+        const refund = parseFloat(s.refund || 0);
         const categoryName = categories.find((c) => c.id === s.category)?.name || "—";
+        const refundableAmount = price * (refund / 100);
+    
         return [
           s.name || "—",
           categoryName,
-          `${parseFloat(s.price || 0).toFixed(2)} ₽`,
+          `${price.toFixed(2)} ₽`,
+          `${refundableAmount.toFixed(2)} ₽`,
         ];
       }),
       [
         { text: "Итого", colSpan: 2, alignment: "right", bold: true },
         {},
-        { text: `${totalSpending.toFixed(2)} ₽`, bold: true },
+        `${totalSpending.toFixed(2)} ₽`,
+        {
+          text: `${spendings.reduce((acc, s) => {
+            const p = parseFloat(s.price || 0);
+            const r = parseFloat(s.refund || 0);
+            return acc + p * (r / 100);
+          }, 0).toFixed(2)} ₽`,
+          bold: true,
+        },
       ],
     ];
+    
   
     const docDefinition = {
       content: [
@@ -270,7 +284,7 @@ const CalculationDetailsPage = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["*", "*", "auto"],
+            widths: ["*", "*","auto", "auto"],
             body: tableBody,
           },
         },
