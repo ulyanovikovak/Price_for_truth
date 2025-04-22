@@ -42,8 +42,18 @@ const CalculationDetailsPage = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:8000/calculation/${id}/details/`)
-      .then((res) => res.json())
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    fetch(`http://localhost:8000/calculation/${id}/details/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
       .then((data) => {
         setCalculation(data.calculation);
         setEditedCalculation({
@@ -51,10 +61,15 @@ const CalculationDetailsPage = () => {
           description: data.calculation.description || "",
           sum: data.calculation.sum || "",
         });
-        
         setSpendings(data.spendings);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Ошибка загрузки расчёта. Возможно, вы не авторизованы.");
+        navigate("/login");
       });
-  }, [id]);
+  }, [id, navigate]);
+  
 
   useEffect(() => {
     if (showCatalog && categories.length === 0) {
