@@ -322,4 +322,30 @@ html, body {
     color: #a00;
   }
   
+  /* CalculationDetailsPage.css */
+  .error-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffe3e3;
+    color: #a60000;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    max-width: 90%;
+  }
+  
+  
+  .error-message button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: #a60000;
+    font-size: 16px;
+    cursor: pointer;
+  }
   

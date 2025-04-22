@@ -23,6 +23,8 @@ const CalculationDetailsPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingSpending, setEditingSpending] = useState(null);
   const [isEditingCalc, setIsEditingCalc] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [editedCalculation, setEditedCalculation] = useState({
     name: "",
     description: "",
@@ -65,7 +67,7 @@ const CalculationDetailsPage = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("Ошибка загрузки расчёта. Возможно, вы не авторизованы.");
+        setErrorMessage("Ошибка загрузки расчёта. Возможно, вы не авторизованы.");
         navigate("/login");
       });
   }, [id, navigate]);
@@ -115,10 +117,26 @@ const CalculationDetailsPage = () => {
       setShowCreateForm(true);
     } catch (err) {
       console.error(err);
-      alert("Не удалось загрузить трату из справочника");
+      setErrorMessage("Не удалось загрузить трату из справочника");
     }
   };
 
+
+  const ErrorToast = ({ message, onClose }) => {
+    if (!message) return null;
+  
+    return (
+      <div className="error-toast">
+        <div className="error-message">
+          {message}
+          <button onClick={onClose}>✖</button>
+        </div>
+      </div>
+    );
+  };
+  
+
+  
   const handleSpendingClick = async (taskId) => {
     const spending = spendings[parseInt(taskId)];
     if (!spending) return;
@@ -152,7 +170,7 @@ const CalculationDetailsPage = () => {
       setEditingSpending(data);
     } catch (err) {
       console.error(err);
-      alert("Не удалось загрузить трату");
+      setErrorMessage("Не удалось загрузить трату");
     }
   };
   
@@ -175,7 +193,7 @@ const CalculationDetailsPage = () => {
       setSpendings(spendings.map((s) => (s.id === updated.id ? updated : s)));
       setEditingSpending(null);
     } catch {
-      alert("Не удалось обновить трату");
+      setErrorMessage("Не удалось обновить трату");
     }
   };
 
@@ -194,13 +212,13 @@ const CalculationDetailsPage = () => {
       setSpendings(spendings.filter((s) => s.id !== editingSpending.id));
       setEditingSpending(null);
     } catch {
-      alert("Не удалось удалить трату");
+      setErrorMessage("Не удалось удалить трату");
     }
   };
 
   const createSpending = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return alert("Вы не авторизованы");
+    if (!token) return setErrorMessage("Вы не авторизованы");
 
     const payload = {
       ...newSpending,
@@ -232,7 +250,7 @@ const CalculationDetailsPage = () => {
       });
     } catch (err) {
       console.error(err);
-      alert("Не удалось создать трату");
+      setErrorMessage("Не удалось создать трату");
     }
   };
 
@@ -252,7 +270,7 @@ const CalculationDetailsPage = () => {
         setTimeout(generatePDFWithPdfMake, 100); // повторный вызов с задержкой
         return;
       } catch (err) {
-        alert("Не удалось загрузить категории для отчёта");
+        setErrorMessage("Не удалось загрузить категории для отчёта");
         return;
       }
     }
@@ -331,7 +349,7 @@ const CalculationDetailsPage = () => {
       setCalculation(updated);
       setIsEditingCalc(false);
     } catch (err) {
-      alert("Не удалось обновить расчёт");
+      setErrorMessage("Не удалось обновить расчёт");
     }
   };
   
@@ -353,7 +371,7 @@ const CalculationDetailsPage = () => {
       if (!res.ok) throw new Error();
       navigate("/profile");
     } catch (err) {
-      alert("Не удалось удалить расчёт");
+      setErrorMessage("Не удалось удалить расчёт");
     }
   };
   
@@ -582,6 +600,9 @@ const CalculationDetailsPage = () => {
           </div>
         </div>
       )}
+
+<ErrorToast message={errorMessage} onClose={() => setErrorMessage("")} />
+
 
     </div>
   );
