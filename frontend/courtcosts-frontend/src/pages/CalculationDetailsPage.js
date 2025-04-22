@@ -38,6 +38,7 @@ const CalculationDetailsPage = () => {
     dateEnd: "",
     category: "",
     withInflation: false,
+    refund: "",
   });
 
   useEffect(() => {
@@ -88,6 +89,7 @@ const CalculationDetailsPage = () => {
       setNewSpending({
         name: spending.name,
         description: spending.description || "",
+        refund: spending.refund || "",
         price: spending.price,
         dateStart: today,
         dateEnd: today,
@@ -430,6 +432,13 @@ const CalculationDetailsPage = () => {
             <input type="text" placeholder="Название" value={newSpending.name} onChange={(e) => setNewSpending({ ...newSpending, name: e.target.value })} />
             <input type="text" placeholder="Описание" value={newSpending.description} onChange={(e) => setNewSpending({ ...newSpending, description: e.target.value })} />
             <input type="number" placeholder="Сумма" value={newSpending.price} onChange={(e) => setNewSpending({ ...newSpending, price: e.target.value })} />
+            <input
+              type="number"
+              placeholder="Возврат %"
+              value={newSpending.refund}
+              onChange={(e) => setNewSpending({ ...newSpending, refund: e.target.value })}
+            />
+
             <div className="date-range">
               <input type="date" value={newSpending.dateStart} onChange={(e) => setNewSpending({ ...newSpending, dateStart: e.target.value })} />
               <span>—</span>
@@ -460,6 +469,13 @@ const CalculationDetailsPage = () => {
             <input type="text" value={editingSpending.name} onChange={(e) => setEditingSpending({ ...editingSpending, name: e.target.value })} />
             <input type="text" value={editingSpending.description} onChange={(e) => setEditingSpending({ ...editingSpending, description: e.target.value })} />
             <input type="number" value={editingSpending.price} onChange={(e) => setEditingSpending({ ...editingSpending, price: e.target.value })} />
+            <input
+              type="number"
+              value={editingSpending.refund}
+              onChange={(e) => setEditingSpending({ ...editingSpending, refund: e.target.value })}
+            />
+
+
             <div className="date-range">
               <input type="date" value={editingSpending.dateStart} onChange={(e) => setEditingSpending({ ...editingSpending, dateStart: e.target.value })} />
               <span>—</span>
