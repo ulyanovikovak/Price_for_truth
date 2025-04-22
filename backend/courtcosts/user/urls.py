@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import RegisterView, LoginView, LogoutView, CalculationCreateView, SpendingCalculationCreateView, \
-    ProfileView, UserUpdateView, CalculationDetailView, SpendingCalculationDetailView
+    ProfileView, UserUpdateView, CalculationDetailView, SpendingCalculationDetailView, CalculationUpdateDeleteView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -33,6 +33,8 @@ urlpatterns = [
     path('spendings/<int:spending_id>/', SpendingCalculationDetailView.as_view(), name='spending-detail'),
 
     path('calculation/<int:calculation_id>/details/', CalculationDetailView.as_view(), name='calculation-detail'),
+
+    path('calculations/<int:calculation_id>/', CalculationUpdateDeleteView.as_view(), name='calculation-update-delete'),
 
     # Эндпоинт для получения данных пользователя и его расчетов
     path('profile/', ProfileView.as_view()),

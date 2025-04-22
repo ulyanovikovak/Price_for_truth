@@ -59,3 +59,4 @@ class SpendingCalculationSerializer(serializers.ModelSerializer):
 
 
 
+

@@ -207,3 +207,27 @@ class SpendingCalculationDetailView(APIView):
         spending = self.get_object(request.user, spending_id)
         spending.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CalculationUpdateDeleteView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, user, calculation_id):
+        return get_object_or_404(Calculation, id=calculation_id, user=user)
+
+    def put(self, request, calculation_id):
+        calculation = self.get_object(request.user, calculation_id)
+        serializer = CalculationSerializer(calculation, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, calculation_id):
+        calculation = self.get_object(request.user, calculation_id)
+        # Удаляем сначала связанные траты
+        SpendingCalculation.objects.filter(calculation=calculation).delete()
+        # Затем сам расчет
+        calculation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
