@@ -49,3 +49,16 @@ body {
     color: red;
   }
   
+
+  .error {
+    color: red;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .success {
+    color: green;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
