@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="delete date">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="add change calculate url">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745239708388</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="add change calculate url">
+      <option name="closed" value="true" />
+      <created>1745315233447</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1745315233447</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -237,6 +248,7 @@
     <MESSAGE value="fix catalog_id" />
     <MESSAGE value="fix spending_id" />
     <MESSAGE value="delete date" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete date" />
+    <MESSAGE value="add change calculate url" />
+    <option name="LAST_COMMIT_MESSAGE" value="add change calculate url" />
   </component>
 </project>

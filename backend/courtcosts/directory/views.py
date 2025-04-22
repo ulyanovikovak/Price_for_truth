@@ -32,6 +32,7 @@ def price_id(request, spending_id):
             'name': spending.name,  # Замените на реальные поля модели
             'description': spending.description,
             'price': spending.price,
+            'refund': spending.refund,
             'category': spending.category.name if spending.category else None,
         }
         return JsonResponse(context)

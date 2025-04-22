@@ -60,6 +60,7 @@ class SpendingCalculation(models.Model):
     calculation = models.ForeignKey(to=Calculation, on_delete=models.PROTECT)
     inflation = models.ForeignKey(Inflation, on_delete=models.CASCADE, null=True, blank=True)
     withInflation = models.BooleanField(default=False)
+    refund = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
 
     class Meta:
         db_table = 'spendingCalculation'
