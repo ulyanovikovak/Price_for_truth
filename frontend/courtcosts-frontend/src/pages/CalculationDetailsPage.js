@@ -530,6 +530,14 @@ const CalculationDetailsPage = () => {
 <div className="gantt-total">
   Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
 </div>
+<div className="gantt-total">
+  Можно вернуть: ₽{spendings.reduce((acc, s) => {
+    const price = parseFloat(s.price || 0);
+    const refund = parseFloat(s.refund || 0);
+    return acc + price * (refund / 100);
+  }, 0).toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
+</div>
+
 
 {isEditingCalc && (
         <div className="modal">
