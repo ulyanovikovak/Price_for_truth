@@ -154,6 +154,8 @@ class ProfileView(generics.RetrieveAPIView):
 class CalculationDetailView(APIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]  # Добавляем поддержку JWT
+    permission_classes = [IsAuthenticated]
     def get(self, request, calculation_id: int):
         calculation = get_object_or_404(Calculation, id=calculation_id)
 
