@@ -211,3 +211,48 @@ body {
 .cancel-button:hover {
   background-color: #b22;
 }
+
+.calc-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.calc-header-content {
+  flex-grow: 1;
+}
+
+.calc-buttons {
+  margin-left: 15px;
+}
+.calc-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.calc-buttons button {
+  margin-left: 10px;
+  font-size: 14px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #f0f0f0;
+}
+
+.delete-btn {
+  background-color: #ffdddd;
+  color: #a00;
+}
+
+.calculation-description {
+  font-size: 15px;
+  color: #555;
+  margin-top: 6px;
+}

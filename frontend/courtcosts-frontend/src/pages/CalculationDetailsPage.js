@@ -22,6 +22,13 @@ const CalculationDetailsPage = () => {
   const [categorySpendings, setCategorySpendings] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingSpending, setEditingSpending] = useState(null);
+  const [isEditingCalc, setIsEditingCalc] = useState(false);
+  const [editedCalculation, setEditedCalculation] = useState({
+    name: "",
+    description: "",
+    sum: "",
+  });
+
 
   const [newSpending, setNewSpending] = useState({
     name: "",
@@ -38,6 +45,12 @@ const CalculationDetailsPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setCalculation(data.calculation);
+        setEditedCalculation({
+          name: data.calculation.name || "",
+          description: data.calculation.description || "",
+          sum: data.calculation.sum || "",
+        });
+        
         setSpendings(data.spendings);
       });
   }, [id]);
@@ -268,6 +281,52 @@ const CalculationDetailsPage = () => {
     pdfMake.createPdf(docDefinition).download(`расчет_${id}_отчет.pdf`);
   };
   
+  const updateCalculation = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    try {
+      const res = await fetch(`http://localhost:8000/calculations/${id}/`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedCalculation),
+      });
+  
+      if (!res.ok) throw new Error();
+      const updated = await res.json();
+      setCalculation(updated);
+      setIsEditingCalc(false);
+    } catch (err) {
+      alert("Не удалось обновить расчёт");
+    }
+  };
+  
+  const deleteCalculation = async () => {
+    const confirmed = window.confirm("Вы уверены, что хотите удалить расчёт? Это действие необратимо.");
+    if (!confirmed) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    try {
+      const res = await fetch(`http://localhost:8000/calculations/${id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error();
+      navigate("/profile");
+    } catch (err) {
+      alert("Не удалось удалить расчёт");
+    }
+  };
+  
+
   
 
 
@@ -342,7 +401,27 @@ const CalculationDetailsPage = () => {
         </div>
       )}
 
-      <h2 className="gantt-header">Расчёт: {calculation?.name || `#${id}`}</h2>
+<div className="calc-header-row">
+  <div className="gantt-header">
+    <div className="gantt-title-wrapper">
+      <h2 className="gantt-title">Расчёт: {calculation?.name || `#${id}`}</h2>
+      <div className="calc-buttons-inline">
+        <button onClick={() => setIsEditingCalc(true)} className="edit-btn">✏️ Редактировать</button>
+        <button onClick={deleteCalculation} className="delete-btn">🗑️ Удалить</button>
+      </div>
+    </div>
+    {calculation?.description && (
+      <p className="calculation-description">{calculation.description}</p>
+    )}
+  </div>
+</div>
+
+
+
+
+
+
+
 
       {showCreateForm && (
         <div className="modal">
@@ -435,6 +514,21 @@ const CalculationDetailsPage = () => {
 <div className="gantt-total">
   Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
 </div>
+
+{isEditingCalc && (
+        <div className="modal">
+          <div className="modal-content">
+            <h4>Редактировать расчёт</h4>
+            <input type="text" placeholder="Название" value={editedCalculation.name} onChange={(e) => setEditedCalculation({ ...editedCalculation, name: e.target.value })} />
+            <input type="text" placeholder="Описание" value={editedCalculation.description} onChange={(e) => setEditedCalculation({ ...editedCalculation, description: e.target.value })} />
+            <input type="number" placeholder="Сумма" value={editedCalculation.sum} onChange={(e) => setEditedCalculation({ ...editedCalculation, sum: e.target.value })} />
+            <div className="modal-buttons">
+              <button onClick={updateCalculation} className="save-button">Сохранить</button>
+              <button onClick={() => setIsEditingCalc(false)} className="cancel-button">Отмена</button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

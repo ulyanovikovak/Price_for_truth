@@ -267,4 +267,59 @@ html, body {
   .gantt-title {
     margin: 0;
   }
+
+  .calculation-description {
+    font-size: 14px;
+    color: #666; /* чуть светлее основного текста */
+    margin: 4px 0 12px 0;
+  }
+  
+
+  .calc-buttons-inline {
+    margin-left: 16px;
+    gap: 10px;
+    display: flex;
+  }
+  
+  .gantt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .gantt-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  
+  .gantt-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  
+  .calc-buttons-inline button {
+    font-size: 14px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 6px;
+    
+    cursor: pointer;
+  }
+  
+  .calc-buttons-inline .edit-btn {
+    background-color: #f0f0f0;
+  }
+  
+  .calc-buttons-inline .delete-btn {
+    background-color: #ffdddd;
+    color: #a00;
+  }
+  
   
