@@ -47,6 +47,16 @@ const CalculationDetailsPage = () => {
   });
 
   useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+  
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
   
@@ -97,6 +107,19 @@ const CalculationDetailsPage = () => {
     fetch(`http://localhost:8000/catalog/categories/${categoryId}/`)
       .then((res) => res.json())
       .then(setCategorySpendings);
+  };
+
+  const validateSpending = (spending) => {
+    const { name, price, refund, dateStart, dateEnd, category } = spending;
+  
+    if (!name || name.trim() === "") return "Название обязательно";
+    if (!price || isNaN(price) || parseFloat(price) < 0) return "Сумма должна быть числом ≥ 0";
+    if (refund === "" || isNaN(refund) || parseFloat(refund) < 0) return "Возврат должен быть числом ≥ 0";
+    if (!dateStart || !dateEnd) return "Обе даты обязательны";
+    if (new Date(dateStart) > new Date(dateEnd)) return "Дата начала должна быть раньше или равна дате конца";
+    if (!category) return "Выберите категорию";
+  
+    return null;
   };
 
   const handleSpendingTemplateClick = async (spendingId) => {
@@ -194,9 +217,15 @@ const CalculationDetailsPage = () => {
   
 
   const updateSpending = async () => {
+    const error = validateSpending(editingSpending);
+    if (error) {
+      setErrorMessage(error);
+      return;
+    }
+  
     const token = localStorage.getItem("token");
     if (!token || !editingSpending?.id) return;
-
+  
     try {
       const res = await fetch(`http://localhost:8000/spendings/${editingSpending.id}/`, {
         method: "PUT",
@@ -214,6 +243,7 @@ const CalculationDetailsPage = () => {
       setErrorMessage("Не удалось обновить трату");
     }
   };
+  
 
   const deleteSpending = async () => {
     const token = localStorage.getItem("token");
@@ -235,14 +265,20 @@ const CalculationDetailsPage = () => {
   };
 
   const createSpending = async () => {
+    const error = validateSpending(newSpending);
+    if (error) {
+      setErrorMessage(error);
+      return;
+    }
+  
     const token = localStorage.getItem("token");
     if (!token) return setErrorMessage("Вы не авторизованы");
-
+  
     const payload = {
       ...newSpending,
       calculation: id,
     };
-
+  
     try {
       const res = await fetch("http://localhost:8000/spending/create/", {
         method: "POST",
@@ -252,7 +288,7 @@ const CalculationDetailsPage = () => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (!res.ok) throw new Error("Ошибка при создании");
       const created = await res.json();
       setSpendings([...spendings, created]);
@@ -265,12 +301,14 @@ const CalculationDetailsPage = () => {
         dateEnd: "",
         category: "",
         withInflation: false,
+        refund: "",
       });
     } catch (err) {
       console.error(err);
       setErrorMessage("Не удалось создать трату");
     }
   };
+  
 
   const totalSpending = spendings.reduce((acc, s) => acc + parseFloat(s.adjusted_price || s.price || 0), 0);
 
@@ -326,6 +364,7 @@ const CalculationDetailsPage = () => {
         },
       ],
     ];
+    
     
     
   
