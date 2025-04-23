@@ -26,7 +26,8 @@ const CustomTooltipContent = ({ task }) => {
     <div className="custom-tooltip">
       <b>{task.name}</b>: {start} - {end}
       <div>Длительность: {duration} дн.</div>
-      <div>Стоимость: {Number(task.price).toFixed(2)} ₽</div>
+      <div>Стоимость: {Number(task.adjusted_price || task.price).toFixed(2)} ₽</div>
+
     </div>
   );
 };
@@ -82,7 +83,12 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
       return (categoryMap[a.category]?.name || "").localeCompare(
         categoryMap[b.category]?.name || ""
       );
-    if (sortBy === "price") return (a.price || 0) - (b.price || 0);
+      if (sortBy === "price") {
+        const aPrice = parseFloat(a.adjusted_price || a.price || 0);
+        const bPrice = parseFloat(b.adjusted_price || b.price || 0);
+        return aPrice - bPrice;
+      }
+      
     return 0;
   });
 
@@ -104,7 +110,7 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
       type: "task",
       progress: 100,
       isDisabled: true,
-      price: s.price,
+      price: s.adjusted_price || s.price,
       styles: {
         backgroundColor: categoryInfo.color,
         backgroundSelectedColor: categoryInfo.color,

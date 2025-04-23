@@ -272,7 +272,8 @@ const CalculationDetailsPage = () => {
     }
   };
 
-  const totalSpending = spendings.reduce((acc, s) => acc + parseFloat(s.price || 0), 0);
+  const totalSpending = spendings.reduce((acc, s) => acc + parseFloat(s.adjusted_price || s.price || 0), 0);
+
 
 
 
@@ -296,7 +297,8 @@ const CalculationDetailsPage = () => {
     const tableBody = [
       ["Дата начала", "Категория", "Название траты", "Сумма", "Сумма возврата"],
       ...spendings.map((s) => {
-        const price = parseFloat(s.price || 0);
+        const price = parseFloat(s.adjusted_price || s.price || 0);
+
         const refund = parseFloat(s.refund || 0);
         const categoryName = categories.find((c) => c.id === s.category)?.name || "—";
         const refundableAmount = price * (refund / 100);
@@ -634,11 +636,12 @@ const CalculationDetailsPage = () => {
   Сумма расходов: ₽{totalSpending.toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
 </div>
 <div className="gantt-total">
-  Можно вернуть: ₽{spendings.reduce((acc, s) => {
-    const price = parseFloat(s.price || 0);
-    const refund = parseFloat(s.refund || 0);
-    return acc + price * (refund / 100);
-  }, 0).toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
+Можно вернуть: ₽{spendings.reduce((acc, s) => {
+  const price = parseFloat(s.adjusted_price || s.price || 0);
+  const refund = parseFloat(s.refund || 0);
+  return acc + price * (refund / 100);
+}, 0).toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
+
 </div>
 
 
