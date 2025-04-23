@@ -411,16 +411,31 @@ const CalculationDetailsPage = () => {
           <div className="catalog-modal" onClick={(e) => e.stopPropagation()}>
             <h4>Категории:</h4>
             <ul className="category-list">
-              {categories.map((cat) => (
-                <li
-                  key={cat.id}
-                  onClick={() => handleCategoryClick(cat.id)}
-                  className={selectedCategoryId === cat.id ? "active" : ""}
-                >
-                  {cat.name}
-                </li>
-              ))}
-            </ul>
+  <li
+    key="all"
+    onClick={() => {
+      setSelectedCategoryId("all");
+      fetch("http://localhost:8000/catalog/price/")
+        .then((res) => res.json())
+        .then((data) => {
+          setCategorySpendings(data.consumption);
+        });
+    }}
+    className={selectedCategoryId === "all" ? "active" : ""}
+  >
+    Все расходы
+  </li>
+  {categories.map((cat) => (
+    <li
+      key={cat.id}
+      onClick={() => handleCategoryClick(cat.id)}
+      className={selectedCategoryId === cat.id ? "active" : ""}
+    >
+      {cat.name}
+    </li>
+  ))}
+</ul>
+
 
             <button className="create-spending-button" onClick={() => setShowCreateForm(true)}>
               ➕ Своя трата
