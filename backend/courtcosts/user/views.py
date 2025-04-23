@@ -1,3 +1,5 @@
+
+
 from rest_framework import generics, status, permissions
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -5,6 +7,8 @@ from django.db.models import F, Case, When, FloatField, ExpressionWrapper
 
 from datetime import datetime
 from rest_framework.exceptions import ValidationError
+
+
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
@@ -24,6 +28,14 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+
+def to_bool(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.lower() in ('true', '1', 'yes')
+    return bool(value)
+
 
 
 class LoginView(generics.GenericAPIView):
@@ -194,15 +206,41 @@ class SpendingCalculationDetailView(APIView):
 
     def get(self, request, spending_id):
         spending = self.get_object(request.user, spending_id)
+
+        # Вычисляем adjusted_price
+        if spending.withInflation and spending.inflation:
+            adjusted_price = float(spending.price) * (1 + float(spending.inflation.percent) / 100)
+        else:
+            adjusted_price = float(spending.price)
+
         serializer = SpendingCalculationSerializer(spending)
-        return Response(serializer.data)
+        data = serializer.data
+        data['adjusted_price'] = round(adjusted_price, 2)
+        return Response(data)
 
     def put(self, request, spending_id):
         spending = self.get_object(request.user, spending_id)
         serializer = SpendingCalculationSerializer(spending, data=request.data, partial=True)
+
         if serializer.is_valid():
-            serializer.save()
+            # Получение даты начала
+            date_start_str = request.data.get('dateStart') or spending.dateStart.strftime('%Y-%m-%d')
+            try:
+                date_start = datetime.strptime(date_start_str, '%Y-%m-%d').date()
+            except (TypeError, ValueError):
+                raise ValidationError({'dateStart': 'Invalid date format (expected YYYY-MM-DD)'})
+
+            # Получаем значение withInflation (если не передан, оставим текущее)
+            with_inflation = to_bool(request.data.get('withInflation', spending.withInflation))
+
+            if with_inflation:
+                inflation = Inflation.objects.filter(year=date_start.year).first()
+                serializer.save(withInflation=True, inflation=inflation)
+            else:
+                serializer.save(withInflation=False, inflation=None)
+
             return Response(serializer.data)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, spending_id):
@@ -218,13 +256,30 @@ class CalculationUpdateDeleteView(APIView):
     def get_object(self, user, calculation_id):
         return get_object_or_404(Calculation, id=calculation_id, user=user)
 
-    def put(self, request, calculation_id):
-        calculation = self.get_object(request.user, calculation_id)
-        serializer = CalculationSerializer(calculation, data=request.data, partial=True)
+    def put(self, request, spending_id):
+        spending = self.get_object(request.user, spending_id)
+        serializer = SpendingCalculationSerializer(spending, data=request.data, partial=True)
+
         if serializer.is_valid():
-            serializer.save()
+            date_start_str = request.data.get('dateStart') or spending.dateStart.strftime('%Y-%m-%d')
+            try:
+                date_start = datetime.strptime(date_start_str, '%Y-%m-%d').date()
+            except (TypeError, ValueError):
+                raise ValidationError({'dateStart': 'Неверный формат даты (YYYY-MM-DD)'})
+
+            with_inflation = to_bool(request.data.get('withInflation', spending.withInflation))
+
+            if with_inflation:
+                inflation = Inflation.objects.filter(year=date_start.year).first()
+                serializer.save(withInflation=True, inflation=inflation)
+            else:
+                serializer.save(withInflation=False, inflation=None)
+
             return Response(serializer.data)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     def delete(self, request, calculation_id):
         calculation = self.get_object(request.user, calculation_id)

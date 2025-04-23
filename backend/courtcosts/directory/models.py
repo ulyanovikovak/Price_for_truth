@@ -32,8 +32,8 @@ class Spending(models.Model):
 class Inflation(models.Model):
     # name = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True, null=True)
-    percent = models.DecimalField(default=0.0, max_digits=3, decimal_places=2)
-    year = models.IntegerField()
+    percent = models.DecimalField(default=0.0, max_digits=5, decimal_places=2)
+    year = models.IntegerField(null=False)
 
     # category = models.ForeignKey(to=Categories, on_delete=models.PROTECT)
 
@@ -43,6 +43,6 @@ class Inflation(models.Model):
         verbose_name_plural = 'inflation'
 
     def __str__(self):
-        return self.year
+        return str(self.year)
 
-# Create your models here.
+# Create your models here.s

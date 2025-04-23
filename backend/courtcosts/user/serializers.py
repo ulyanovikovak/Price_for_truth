@@ -49,12 +49,28 @@ class CalculationSerializer(serializers.ModelSerializer):
 
 
 class SpendingCalculationSerializer(serializers.ModelSerializer):
+    adjusted_price = serializers.SerializerMethodField()
+    inflation_percent = serializers.SerializerMethodField()
+
     class Meta:
         model = SpendingCalculation
         fields = [
-            'id', 'name', 'description', 'price', 'dateStart', 'dateEnd', 'refund',  'category', 'calculation', 'withInflation'
+            'id', 'name', 'description', 'price', 'dateStart', 'dateEnd',
+            'refund', 'category', 'calculation', 'withInflation',
+            'adjusted_price', 'inflation_percent'
         ]
         read_only_fields = ['id', 'calculation']
+
+    def get_adjusted_price(self, obj):
+        if obj.withInflation and obj.inflation:
+            return round(float(obj.price) * (1 + float(obj.inflation.percent) / 100), 2)
+        return float(obj.price)
+
+    def get_inflation_percent(self, obj):
+        if obj.inflation:
+            return float(obj.inflation.percent)
+        return None
+
 
 
 

@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="add refund in models">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/directory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
