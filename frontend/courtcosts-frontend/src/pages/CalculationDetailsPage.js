@@ -25,6 +25,9 @@ const CalculationDetailsPage = () => {
   const [isEditingCalc, setIsEditingCalc] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+
   const [editedCalculation, setEditedCalculation] = useState({
     name: "",
     description: "",
@@ -74,14 +77,20 @@ const CalculationDetailsPage = () => {
   
 
   useEffect(() => {
-    if (showCatalog && categories.length === 0) {
-      fetch("http://localhost:8000/catalog/categories/")
+    if (showCatalog) {
+      if (categories.length === 0) {
+        fetch("http://localhost:8000/catalog/categories/")
+          .then((res) => res.json())
+          .then((data) => setCategories(data.category));
+      }
+  
+      // Загружаем все траты (если ещё не загружено или сброшено)
+      fetch("http://localhost:8000/catalog/price/")
         .then((res) => res.json())
-        .then((data) => {
-          setCategories(data.category);
-        });
+        .then((data) => setCategorySpendings(data.consumption));
     }
-  }, [showCatalog, categories]);
+  }, [showCatalog]);
+  
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategoryId(categoryId);
@@ -134,6 +143,15 @@ const CalculationDetailsPage = () => {
       </div>
     );
   };
+
+  const toggleCatalog = () => {
+    if (showCatalog) {
+      setSearchQuery(""); // очищаем поиск
+      setSelectedCategoryId(null); // сбрасываем выбранную категорию, если нужно
+    }
+    setShowCatalog(!showCatalog);
+  };
+  
   
 
   
@@ -400,15 +418,30 @@ const CalculationDetailsPage = () => {
         </div>
 
         <div className="catalog-wrapper">
-          <button onClick={() => setShowCatalog(!showCatalog)} className="catalog-toggle">
+          <button onClick={toggleCatalog} className="catalog-toggle">
+
             {showCatalog ? "Скрыть справочник" : "Открыть справочник"}
           </button>
         </div>
       </div>
 
       {showCatalog && (
-        <div className="catalog-overlay" onClick={() => setShowCatalog(false)}>
+        <div className="catalog-overlay" onClick={() => {
+          setShowCatalog(false);
+          setSearchQuery("");
+          setSelectedCategoryId(null);
+        }}>
+        
           <div className="catalog-modal" onClick={(e) => e.stopPropagation()}>
+          <input
+  type="text"
+  placeholder="Поиск по тратам..."
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+  className="spending-search-input"
+/>
+
+
             <h4>Категории:</h4>
             <ul className="category-list">
   <li
@@ -446,12 +479,18 @@ const CalculationDetailsPage = () => {
                 <h5>Траты по категории:</h5>
                 {categorySpendings.length > 0 ? (
                   <ul>
-                    {categorySpendings.map((s) => (
-  <li key={s.id} onClick={() => handleSpendingTemplateClick(s.id)}>
-    <span className="spending-name">{s.name || "Без названия"}</span>
-    <span className="spending-price">₽{s.adjusted_price || s.price}</span>
-  </li>
+                    {categorySpendings
+  .filter((s) =>
+    s.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    s.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  .map((s) => (
+    <li key={s.id} onClick={() => handleSpendingTemplateClick(s.id)}>
+      <span className="spending-name">{s.name || "Без названия"}</span>
+      <span className="spending-price">₽{s.adjusted_price || s.price}</span>
+    </li>
 ))}
+
 
                   </ul>
                 ) : (
