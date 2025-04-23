@@ -157,6 +157,7 @@ class ProfileView(generics.RetrieveAPIView):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
+            'username': user.username,
             'phone_number': user.phone_number if hasattr(user, 'phone_number') else None,
             'calculations': CalculationSerializer(Calculation.objects.filter(user=user), many=True).data
         }
