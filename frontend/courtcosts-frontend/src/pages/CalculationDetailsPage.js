@@ -340,7 +340,7 @@ const CalculationDetailsPage = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["auto", "*", "*", "auto", "auto"],
+            widths: ["auto", "auto", "auto", "auto", "auto"],
 
             body: tableBody,
           },
