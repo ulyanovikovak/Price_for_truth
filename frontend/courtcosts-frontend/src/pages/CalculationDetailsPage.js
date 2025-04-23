@@ -93,7 +93,7 @@ const CalculationDetailsPage = () => {
   const handleSpendingTemplateClick = async (spendingId) => {
     try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:8000/spendings/${spending.id}/`, {
+        const res = await fetch(`http://localhost:8000/catalog/price/${spendingId}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -432,14 +432,12 @@ const CalculationDetailsPage = () => {
                 {categorySpendings.length > 0 ? (
                   <ul>
                     {categorySpendings.map((s) => (
-                      <li
-                        key={s.id}
-                        onClick={() => handleSpendingTemplateClick(s.id)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {s.name || "Без названия"} — ₽{s.adjusted_price || s.price}
-                      </li>
-                    ))}
+  <li key={s.id} onClick={() => handleSpendingTemplateClick(s.id)}>
+    <span className="spending-name">{s.name || "Без названия"}</span>
+    <span className="spending-price">₽{s.adjusted_price || s.price}</span>
+  </li>
+))}
+
                   </ul>
                 ) : (
                   <p>Нет данных по этой категории.</p>

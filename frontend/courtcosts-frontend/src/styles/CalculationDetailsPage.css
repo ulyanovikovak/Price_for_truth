@@ -349,3 +349,40 @@ html, body {
     cursor: pointer;
   }
   
+
+  .category-spendings ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .category-spendings li {
+    background-color: #f8f9fb;
+    border: 1px solid #dcdde1;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .category-spendings li:hover {
+    background-color: #eef0f5;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .spending-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .spending-price {
+    font-size: 15px;
+    color: #3f51b5;
+    font-weight: bold;
+  }
+  
