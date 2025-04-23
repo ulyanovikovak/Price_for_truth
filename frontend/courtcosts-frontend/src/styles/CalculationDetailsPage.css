@@ -395,3 +395,75 @@ html, body {
     font-size: 14px;
   }
   
+
+
+  /* Заголовки в формах */
+.modal-content h4 {
+    margin-top: 0;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  /* Подписи к полям */
+  .modal-content label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: #444;
+    gap: 4px;
+  }
+  
+  /* Чекбоксы */
+  .modal-content input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.1);
+    vertical-align: middle;
+  }
+  
+  /* Ради улучшения визуала: выравнивание чекбокса с подписью */
+  .modal-content label input[type="checkbox"] + span,
+  .modal-content label input[type="checkbox"] {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Стили для групп дат */
+  .date-range label {
+    flex: 1;
+  }
+  
+  /* Чекбокс с подписью */
+  .modal-content label.checkbox-label {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  .date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .date-separator {
+    width: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: #555;
+  }
+  
+
+  .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+    white-space: nowrap;
+  }
+  
+  

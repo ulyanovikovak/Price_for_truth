@@ -533,32 +533,49 @@ const CalculationDetailsPage = () => {
       {showCreateForm && (
         <div className="modal">
           <div className="modal-content">
-            <h4>Добавить свою трату</h4>
-            <input type="text" placeholder="Название" value={newSpending.name} onChange={(e) => setNewSpending({ ...newSpending, name: e.target.value })} />
-            <input type="text" placeholder="Описание" value={newSpending.description} onChange={(e) => setNewSpending({ ...newSpending, description: e.target.value })} />
-            <input type="number" placeholder="Сумма" value={newSpending.price} onChange={(e) => setNewSpending({ ...newSpending, price: e.target.value })} />
-            <input
-              type="number"
-              placeholder="Возврат %"
-              value={newSpending.refund}
-              onChange={(e) => setNewSpending({ ...newSpending, refund: e.target.value })}
-            />
-
-            <div className="date-range">
-              <input type="date" value={newSpending.dateStart} onChange={(e) => setNewSpending({ ...newSpending, dateStart: e.target.value })} />
-              <span>—</span>
-              <input type="date" value={newSpending.dateEnd} onChange={(e) => setNewSpending({ ...newSpending, dateEnd: e.target.value })} />
-            </div>
-            <select value={newSpending.category} onChange={(e) => setNewSpending({ ...newSpending, category: parseInt(e.target.value) })}>
-              <option value="">Выберите категорию</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-            <label>
+          <h4>Добавить свою трату</h4>
+<label>
+  Название:
+  <input type="text" placeholder="Например, госпошлина" value={newSpending.name} onChange={(e) => setNewSpending({ ...newSpending, name: e.target.value })} />
+</label>
+<label>
+  Описание:
+  <input type="text" placeholder="Доп. детали траты" value={newSpending.description} onChange={(e) => setNewSpending({ ...newSpending, description: e.target.value })} />
+</label>
+<label>
+  Сумма:
+  <input type="number" placeholder="₽" value={newSpending.price} onChange={(e) => setNewSpending({ ...newSpending, price: e.target.value })} />
+</label>
+<label>
+  Возврат (%):
+  <input type="number" placeholder="0" value={newSpending.refund} onChange={(e) => setNewSpending({ ...newSpending, refund: e.target.value })} />
+</label>
+<div className="date-range">
+  <label>
+    Начало:
+    <input type="date" value={newSpending.dateStart} onChange={(e) => setNewSpending({ ...newSpending, dateStart: e.target.value })} />
+  </label>
+  <div className="date-separator"></div>
+  <label>
+    Примерный конец:
+    <input type="date" value={newSpending.dateEnd} onChange={(e) => setNewSpending({ ...newSpending, dateEnd: e.target.value })} />
+  </label>
+</div>
+<label>
+  Категория:
+  <select value={newSpending.category} onChange={(e) => setNewSpending({ ...newSpending, category: parseInt(e.target.value) })}>
+    <option value="">Выберите категорию</option>
+    {categories.map((c) => (
+      <option key={c.id} value={c.id}>{c.name}</option>
+    ))}
+  </select>
+</label>
+<label>
               <input type="checkbox" checked={newSpending.withInflation} onChange={(e) => setNewSpending({ ...newSpending, withInflation: e.target.checked })} />
               Учитывать инфляцию
             </label>
+
+
             <div className="modal-buttons">
               <button onClick={createSpending} className="save-button">Создать</button>
               <button onClick={() => setShowCreateForm(false)} className="cancel-button">Отмена</button>
@@ -570,43 +587,59 @@ const CalculationDetailsPage = () => {
       {editingSpending && (
         <div className="modal">
           <div className="modal-content">
-            <h4>Редактировать трату</h4>
-            <input type="text" value={editingSpending.name} onChange={(e) => setEditingSpending({ ...editingSpending, name: e.target.value })} />
-            <input type="text" value={editingSpending.description} onChange={(e) => setEditingSpending({ ...editingSpending, description: e.target.value })} />
-            <input type="number" value={editingSpending.price} onChange={(e) => setEditingSpending({ ...editingSpending, price: e.target.value })} />
-            <input
-              type="number"
-              value={editingSpending.refund}
-              onChange={(e) => setEditingSpending({ ...editingSpending, refund: e.target.value })}
-            />
-
-
-            <div className="date-range">
-              <input type="date" value={editingSpending.dateStart} onChange={(e) => setEditingSpending({ ...editingSpending, dateStart: e.target.value })} />
-              <span>—</span>
-              <input type="date" value={editingSpending.dateEnd} onChange={(e) => setEditingSpending({ ...editingSpending, dateEnd: e.target.value })} />
-            </div>
-            <select
-                value={editingSpending.category ?? ""}
-                onChange={(e) =>
-                    setEditingSpending({
-                    ...editingSpending,
-                    category: parseInt(e.target.value),
-                    })
-                }
-                >
-                <option value="">Выберите категорию</option>
-                {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                    {c.name}
-                    </option>
-                ))}
-                </select>
-
-            <label>
-              <input type="checkbox" checked={editingSpending.withInflation} onChange={(e) => setEditingSpending({ ...editingSpending, withInflation: e.target.checked })} />
+          <h4>Редактировать трату</h4>
+<label>
+  Название:
+  <input type="text" value={editingSpending.name} onChange={(e) => setEditingSpending({ ...editingSpending, name: e.target.value })} />
+</label>
+<label>
+  Описание:
+  <input type="text" value={editingSpending.description} onChange={(e) => setEditingSpending({ ...editingSpending, description: e.target.value })} />
+</label>
+<label>
+  Сумма:
+  <input type="number" value={editingSpending.price} onChange={(e) => setEditingSpending({ ...editingSpending, price: e.target.value })} />
+</label>
+<label>
+  Возврат (%):
+  <input type="number" value={editingSpending.refund} onChange={(e) => setEditingSpending({ ...editingSpending, refund: e.target.value })} />
+</label>
+<div className="date-range">
+  <label>
+    Начало:
+    <input type="date" value={editingSpending.dateStart} onChange={(e) => setEditingSpending({ ...editingSpending, dateStart: e.target.value })} />
+  </label>
+<div className="date-separator"></div>  
+  <label>
+    Конец:
+    <input type="date" value={editingSpending.dateEnd} onChange={(e) => setEditingSpending({ ...editingSpending, dateEnd: e.target.value })} />
+  </label>
+</div>
+<label>
+  Категория:
+  <select
+    value={editingSpending.category ?? ""}
+    onChange={(e) =>
+      setEditingSpending({
+        ...editingSpending,
+        category: parseInt(e.target.value),
+      })
+    }
+  >
+    <option value="">Выберите категорию</option>
+    {categories.map((c) => (
+      <option key={c.id} value={c.id}>
+        {c.name}
+      </option>
+    ))}
+  </select>
+</label>
+<label>
+              <input type="checkbox" checked={newSpending.withInflation} onChange={(e) => setNewSpending({ ...newSpending, withInflation: e.target.checked })} />
               Учитывать инфляцию
             </label>
+
+
             <div className="modal-buttons">
               <button onClick={updateSpending} className="save-button">Сохранить</button>
               <button onClick={deleteSpending} className="cancel-button">Удалить</button>
@@ -649,9 +682,19 @@ const CalculationDetailsPage = () => {
         <div className="modal">
           <div className="modal-content">
             <h4>Редактировать расчёт</h4>
-            <input type="text" placeholder="Название" value={editedCalculation.name} onChange={(e) => setEditedCalculation({ ...editedCalculation, name: e.target.value })} />
-            <input type="text" placeholder="Описание" value={editedCalculation.description} onChange={(e) => setEditedCalculation({ ...editedCalculation, description: e.target.value })} />
-            <input type="number" placeholder="Сумма" value={editedCalculation.sum} onChange={(e) => setEditedCalculation({ ...editedCalculation, sum: e.target.value })} />
+<label>
+  Название:
+  <input type="text" placeholder="Название расчёта" value={editedCalculation.name} onChange={(e) => setEditedCalculation({ ...editedCalculation, name: e.target.value })} />
+</label>
+<label>
+  Описание:
+  <input type="text" placeholder="Описание" value={editedCalculation.description} onChange={(e) => setEditedCalculation({ ...editedCalculation, description: e.target.value })} />
+</label>
+<label>
+  Сумма иска:
+  <input type="number" placeholder="₽" value={editedCalculation.sum} onChange={(e) => setEditedCalculation({ ...editedCalculation, sum: e.target.value })} />
+</label>
+
             <div className="modal-buttons">
               <button onClick={updateCalculation} className="save-button">Сохранить</button>
               <button onClick={() => setIsEditingCalc(false)} className="cancel-button">Отмена</button>
