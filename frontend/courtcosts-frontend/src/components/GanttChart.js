@@ -87,33 +87,34 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
   });
 
   const tasks = sortedSpendings
-    .map((s, i) => {
-      const start = new Date(s.dateStart);
-      const end = new Date(s.dateEnd);
-      if (!s.dateStart || !s.dateEnd || isNaN(start.getTime()) || isNaN(end.getTime())) {
-        return null;
-      }
+  .map((s) => {
+    const start = new Date(s.dateStart);
+    const end = new Date(s.dateEnd);
+    if (!s.dateStart || !s.dateEnd || isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return null;
+    }
 
-      const categoryInfo = categoryMap[s.category] || { name: "Другое", color: "#ccc" };
+    const categoryInfo = categoryMap[s.category] || { name: "Другое", color: "#ccc" };
 
-      return {
-        id: `${i}`,
-        name: `${s.name?.trim() || `Трата ${i + 1}`} (${categoryInfo.name})`,
-        start,
-        end,
-        type: "task",
-        progress: 100,
-        isDisabled: true,
-        price: s.price,
-        styles: {
-          backgroundColor: categoryInfo.color,
-          backgroundSelectedColor: categoryInfo.color,
-          progressColor: categoryInfo.color,
-          progressSelectedColor: categoryInfo.color,
-        },
-      };
-    })
-    .filter((t) => t && t.start && t.end);
+    return {
+      id: `${s.id}`,
+      name: `${s.name?.trim() || "Без названия"} (${categoryInfo.name})`,
+      start,
+      end,
+      type: "task",
+      progress: 100,
+      isDisabled: true,
+      price: s.price,
+      styles: {
+        backgroundColor: categoryInfo.color,
+        backgroundSelectedColor: categoryInfo.color,
+        progressColor: categoryInfo.color,
+        progressSelectedColor: categoryInfo.color,
+      },
+    };
+  })
+  .filter(Boolean);
+
 
   const today = new Date();
   const startDate = new Date(today.getFullYear(), 0, 1);
@@ -186,6 +187,7 @@ const GanttChart = ({ spendings, onSpendingClick }) => {
       <div className="gantt-inner">
         {tasks.length > 0 ? (
           <Gantt
+            key={JSON.stringify(tasks)}
             tasks={tasks}
             viewMode={ViewMode.Month}
             listCellWidth="155px"

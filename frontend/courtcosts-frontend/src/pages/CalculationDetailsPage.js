@@ -156,8 +156,8 @@ const CalculationDetailsPage = () => {
 
   
   const handleSpendingClick = async (taskId) => {
-    const spending = spendings[parseInt(taskId)];
-    if (!spending) return;
+    const spending = spendings.find((s) => String(s.id) === taskId);
+  if (!spending) return
   
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -294,23 +294,25 @@ const CalculationDetailsPage = () => {
     }
   
     const tableBody = [
-      ["Название траты", "Категория", "Сумма", "Сумма возврата"],
+      ["Дата начала", "Категория", "Название траты", "Сумма", "Сумма возврата"],
       ...spendings.map((s) => {
         const price = parseFloat(s.price || 0);
         const refund = parseFloat(s.refund || 0);
         const categoryName = categories.find((c) => c.id === s.category)?.name || "—";
         const refundableAmount = price * (refund / 100);
+        const startDate = s.dateStart || "—";
     
         return [
-          s.name || "—",
+          startDate,
           categoryName,
+          s.name || "—",
           `${price.toFixed(2)} ₽`,
           `${refundableAmount.toFixed(2)} ₽`,
         ];
       }),
       [
-        { text: "Итого", colSpan: 2, alignment: "right", bold: true },
-        {},
+        { text: "Итого", colSpan: 3, alignment: "right", bold: true },
+        {}, {}, 
         `${totalSpending.toFixed(2)} ₽`,
         {
           text: `${spendings.reduce((acc, s) => {
@@ -322,6 +324,7 @@ const CalculationDetailsPage = () => {
         },
       ],
     ];
+    
     
   
     const docDefinition = {
@@ -335,7 +338,8 @@ const CalculationDetailsPage = () => {
         {
           table: {
             headerRows: 1,
-            widths: ["*", "*","auto", "auto"],
+            widths: ["auto", "*", "*", "auto", "auto"],
+
             body: tableBody,
           },
         },
