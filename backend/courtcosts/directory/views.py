@@ -1,10 +1,35 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Spending, Inflation, Categories
 
 
-# Create your views here.
+from rest_framework import viewsets, permissions
+from .serializers import CategoriesSerializer, SpendingSerializer, InflationSerializer
+
+class IsAdminPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and request.user.is_staff
+
+class CategoriesViewSet(viewsets.ModelViewSet):
+    queryset = Categories.objects.all()
+    serializer_class = CategoriesSerializer
+    permission_classes = [IsAdminPermission]
+    authentication_classes = [JWTAuthentication]
+
+class SpendingViewSet(viewsets.ModelViewSet):
+    queryset = Spending.objects.all()
+    serializer_class = SpendingSerializer
+    permission_classes = [IsAdminPermission]
+    authentication_classes = [JWTAuthentication]
+
+class InflationViewSet(viewsets.ModelViewSet):
+    queryset = Inflation.objects.all()
+    serializer_class = InflationSerializer
+    permission_classes = [IsAdminPermission]
+    authentication_classes = [JWTAuthentication]
+
 
 def price(request):
     consumption = list(Spending.objects.all().values())  # Преобразуем QuerySet в список словарей

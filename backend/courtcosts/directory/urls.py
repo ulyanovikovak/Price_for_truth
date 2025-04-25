@@ -15,14 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # import sys
 # sys.path.append("directory")
 
-from .views import price, price_id, inflation, inflation_id, categories, categories_id
+from .views import price, price_id, inflation, inflation_id, categories, categories_id, CategoriesViewSet, \
+    SpendingViewSet, InflationViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'categories', CategoriesViewSet)
+router.register(r'spendings', SpendingViewSet)
+router.register(r'inflations', InflationViewSet)
+
 
 urlpatterns = [
+    path('admin/', include(router.urls)),
+
     path('price/', price),
     path('price/<int:spending_id>/', price_id),
     path('inflation/', inflation),

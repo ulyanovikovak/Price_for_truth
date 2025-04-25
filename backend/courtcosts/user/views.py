@@ -15,10 +15,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Calculation, SpendingCalculation
 from .serializers import RegisterSerializer, LoginSerializer, JWTSerializer, UserSerializer, CalculationSerializer, \
-    SpendingCalculationSerializer
+    SpendingCalculationSerializer, CustomTokenObtainPairSerializer
 from directory.models import Inflation
 
 User = get_user_model()
@@ -38,20 +39,20 @@ def to_bool(value):
 
 
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
+class LoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
     permission_classes = [AllowAny]
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh)
-        }, status=status.HTTP_200_OK)
+    # def post(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     user = serializer.validated_data
+    #
+    #     refresh = RefreshToken.for_user(user)
+    #     return Response({
+    #         'access': str(refresh.access_token),
+    #         'refresh': str(refresh)
+    #     }, status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):

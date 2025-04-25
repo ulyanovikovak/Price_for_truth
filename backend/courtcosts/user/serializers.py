@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Calculation, SpendingCalculation
 
@@ -40,6 +41,21 @@ class LoginSerializer(serializers.Serializer):
 class JWTSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
+
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # ДОБАВЛЯЕМ флаги в токен
+        token['is_staff'] = user.is_staff
+        token['is_superuser'] = user.is_superuser
+        token['email'] = user.email
+
+        return token
+
 
 
 class CalculationSerializer(serializers.ModelSerializer):
