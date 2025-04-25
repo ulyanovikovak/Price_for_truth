@@ -1,0 +1,211 @@
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 32px;
+    background-color: #f4f7fc;
+  }
+  
+  .admin-panel h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .tabs button {
+    background-color: #5861e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .tabs button:hover {
+    background-color: #4a54e1;
+  }
+  
+  .tab-content {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .tab-content h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .tab-content input,
+  .tab-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+  
+  .tab-content button {
+    background-color: #5861e5;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  
+  .tab-content button:hover {
+    background-color: #4a54e1;
+  }
+  
+  .tab-content ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .tab-content li {
+    background: #eef0ff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .tab-content li button {
+    margin-left: 8px;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .tab-content li button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .tab-content li .delete-button {
+    background-color: #ffdddd;
+    color: #a00;
+  }
+  
+  .tab-content li .delete-button:hover {
+    background-color: #ffcccc;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .edit-button {
+    background-color: #e4e7ff;
+    color: #333;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .edit-button:hover {
+    background-color: #d1d6ff;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  }
+  
+  .delete-button {
+    background-color: #ffe4e4;
+    color: #a00000;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .delete-button:hover {
+    background-color: #ffc7c7;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  }
+  
+
+  .tab-content li {
+    background: #eef0ff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .spending-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .spending-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  
+  .spending-price {
+    font-size: 15px;
+    color: #3f51b5;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+  
+  .logout-button {
+    background-color: #ff5c5c;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  
+  .logout-button:hover {
+    background-color: #e04e4e;
+  }
+  
+  

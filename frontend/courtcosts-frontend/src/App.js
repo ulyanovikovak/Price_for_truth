@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import CalculationDetailsPage from "./pages/CalculationDetailsPage"
-import AdminRedirectPage from './pages/AdminRedirectPage';
+import AdminPage from './pages/AdminPage';
 
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <Route path="/register" element={<AuthPage isRegister={true} />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/calculation/:id" element={<CalculationDetailsPage />} />
-        <Route path="/admin" element={<AdminRedirectPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </Router>
   );

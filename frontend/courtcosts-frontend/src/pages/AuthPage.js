@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/AuthPage.css";
 
 const AuthPage = ({ isRegister }) => {
@@ -12,17 +12,39 @@ const AuthPage = ({ isRegister }) => {
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (!name) return;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
+    setLoading(true);
 
     if (isRegister && formData.password !== formData.password2) {
       setError("Пароли не совпадают");
+      setLoading(false);
       return;
     }
 
@@ -55,7 +77,6 @@ const AuthPage = ({ isRegister }) => {
       }
 
       if (isRegister) {
-        // Показываем сообщение и через 1.5 сек перенаправляем на login
         setSuccessMessage("Регистрация выполнена успешно");
         setTimeout(() => {
           setSuccessMessage(null);
@@ -71,9 +92,17 @@ const AuthPage = ({ isRegister }) => {
 
       localStorage.setItem("token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
-      navigate("/profile");
+
+      const userData = parseJwt(data.access);
+      if (userData?.is_staff) {
+        navigate("/admin");
+      } else {
+        navigate("/profile");
+      }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,17 +145,15 @@ const AuthPage = ({ isRegister }) => {
               required
             />
           )}
-          <button type="submit">
-            {isRegister ? "Зарегистрироваться" : "Войти"}
+          <button type="submit" disabled={loading}>
+            {loading ? "Загрузка..." : isRegister ? "Зарегистрироваться" : "Войти"}
           </button>
         </form>
         <p>
-          {isRegister
-            ? "Уже зарегистрированы?"
-            : "Еще не зарегистрированы?"}{" "}
-          <a href={isRegister ? "/login" : "/register"}>
+          {isRegister ? "Уже зарегистрированы?" : "Еще не зарегистрированы?"}{" "}
+          <Link to={isRegister ? "/login" : "/register"}>
             {isRegister ? "Войти" : "Зарегистрироваться"} здесь
-          </a>
+          </Link>
         </p>
       </div>
     </div>
