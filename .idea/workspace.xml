@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="fix inflation">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="fix user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -229,7 +229,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745412039117</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="fix user">
+      <option name="closed" value="true" />
+      <created>1745413004064</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1745413004064</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,7 +262,6 @@
     <MESSAGE value="fix update user profile" />
     <MESSAGE value="delete slug" />
     <MESSAGE value="fix category" />
-    <MESSAGE value="fix user" />
     <MESSAGE value="back SpendingCalculation" />
     <MESSAGE value="added datestart and dateEnd" />
     <MESSAGE value="fix catalog_id" />
@@ -263,6 +270,7 @@
     <MESSAGE value="add change calculate url" />
     <MESSAGE value="add refund in models" />
     <MESSAGE value="fix inflation" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix inflation" />
+    <MESSAGE value="fix user" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix user" />
   </component>
 </project>

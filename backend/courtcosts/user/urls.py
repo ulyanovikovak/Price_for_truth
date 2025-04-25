@@ -19,6 +19,7 @@ from django.urls import path
 
 from .views import RegisterView, LoginView, LogoutView, CalculationCreateView, SpendingCalculationCreateView, \
     ProfileView, UserUpdateView, CalculationDetailView, SpendingCalculationDetailView, CalculationUpdateDeleteView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -40,4 +41,5 @@ urlpatterns = [
     path('profile/', ProfileView.as_view()),
 
     path("update-profile/", UserUpdateView.as_view(), name="update-profile"),
+path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

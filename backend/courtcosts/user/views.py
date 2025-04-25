@@ -257,27 +257,12 @@ class CalculationUpdateDeleteView(APIView):
     def get_object(self, user, calculation_id):
         return get_object_or_404(Calculation, id=calculation_id, user=user)
 
-    def put(self, request, spending_id):
-        spending = self.get_object(request.user, spending_id)
-        serializer = SpendingCalculationSerializer(spending, data=request.data, partial=True)
-
+    def put(self, request, calculation_id):
+        calculation = self.get_object(request.user, calculation_id)
+        serializer = CalculationSerializer(calculation, data=request.data, partial=True)
         if serializer.is_valid():
-            date_start_str = request.data.get('dateStart') or spending.dateStart.strftime('%Y-%m-%d')
-            try:
-                date_start = datetime.strptime(date_start_str, '%Y-%m-%d').date()
-            except (TypeError, ValueError):
-                raise ValidationError({'dateStart': 'Неверный формат даты (YYYY-MM-DD)'})
-
-            with_inflation = to_bool(request.data.get('withInflation', spending.withInflation))
-
-            if with_inflation:
-                inflation = Inflation.objects.filter(year=date_start.year).first()
-                serializer.save(withInflation=True, inflation=inflation)
-            else:
-                serializer.save(withInflation=False, inflation=None)
-
+            serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
