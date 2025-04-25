@@ -32,7 +32,7 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
         try {
-          const response = await fetch("http://localhost:8000/profile/", {
+          const response = await fetchWithRefresh("http://localhost:8000/profile/", {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const ProfilePage = () => {
       }
   
       try {
-        const response = await fetch("http://localhost:8000/update-profile/", {
+        const response = await fetchWithRefresh("http://localhost:8000/update-profile/", {
           method: "PUT",
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -85,6 +85,50 @@ const ProfilePage = () => {
       }
     };
 
+    const fetchWithRefresh = async (url, options = {}) => {
+      let token = localStorage.getItem("token");
+      const refresh = localStorage.getItem("refresh_token");
+    
+      if (!token || !refresh) {
+        throw new Error("Missing token or refresh_token");
+      }
+    
+      const makeRequest = async (accessToken) => {
+        const finalOptions = {
+          ...options,
+          headers: {
+            ...(options.headers || {}),
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        return fetch(url, finalOptions);
+      };
+    
+      let response = await makeRequest(token);
+    
+      if (response.status === 401) {
+        // Пытаемся обновить токен
+        const refreshResponse = await fetch("http://localhost:8000/token/refresh/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refresh }),
+        });
+    
+        if (!refreshResponse.ok) {
+          throw new Error("Failed to refresh token");
+        }
+    
+        const data = await refreshResponse.json();
+        localStorage.setItem("token", data.access);
+        response = await makeRequest(data.access);
+      }
+    
+      return response;
+    };
+    
+
   const logout = async () => {
     const token = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refresh_token");
@@ -98,7 +142,7 @@ const ProfilePage = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:8000/logout/", {
+      const response = await fetchWithRefresh("http://localhost:8000/logout/", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -142,13 +186,17 @@ const ProfilePage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/calculations/create/", {
+      const response = await fetchWithRefresh("http://localhost:8000/calculations/create/", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newCalculation),
+        body: JSON.stringify({
+          ...newCalculation,
+          sum: parseFloat(newCalculation.sum), // 👈 это важно
+        }),
+        
       });
 
       if (response.status === 403) {
