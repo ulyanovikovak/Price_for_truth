@@ -4,8 +4,43 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Calculation, SpendingCalculation
 
+from datetime import datetime, date
+
+from directory.models import Inflation
+
 User = get_user_model()
 
+
+def calculate_adjusted_price_from_today(price: float, date_start: date) -> float:
+    today = date.today()
+
+    if date_start == today:
+        return round(price, 2)
+
+    current_date = today
+    final_price = price
+    step = 1 if today < date_start else -1
+
+    while (step == 1 and current_date <= date_start) or (step == -1 and current_date >= date_start):
+        year = current_date.year
+        inflation = Inflation.objects.filter(year=year).first()
+
+        if (step == 1 and year == date_start.year) or (step == -1 and year == date_start.year):
+            months = abs(date_start.month - current_date.month) + 1
+        else:
+            months = 12 - current_date.month + 1 if step == 1 else current_date.month
+
+        if inflation:
+            monthly_rate = float(inflation.percent) / (12 * 100)
+            final_price *= (1 + monthly_rate) ** (step * months)
+
+
+        if step == 1:
+            current_date = date(year + 1, 1, 1)
+        else:
+            current_date = date(year - 1, 12, 1)
+
+    return round(final_price, 2)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -79,9 +114,13 @@ class SpendingCalculationSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'calculation']
 
     def get_adjusted_price(self, obj):
-        if obj.withInflation and obj.inflation:
-            return round(float(obj.price) * (1 + float(obj.inflation.percent) / 100), 2)
-        return float(obj.price)
+        if not bool(obj.withInflation):
+            return round(float(obj.price), 2)
+        else:
+            return calculate_adjusted_price_from_today(
+                price=float(obj.price),
+                date_start=obj.dateStart,
+            )
 
     def get_inflation_percent(self, obj):
         if obj.inflation:
