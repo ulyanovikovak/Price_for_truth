@@ -26,6 +26,8 @@ const CalculationDetailsPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
 
 
   const [editedCalculation, setEditedCalculation] = useState({
@@ -460,10 +462,13 @@ const CalculationDetailsPage = () => {
     }
   };
   
-  const deleteCalculation = async () => {
-    const confirmed = window.confirm("Вы уверены, что хотите удалить расчёт? Это действие необратимо.");
-    if (!confirmed) return;
+  const deleteCalculation = () => {
+    setShowDeleteConfirmation(true);
+  };
   
+  
+
+  const confirmDeleteCalculation = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
   
@@ -481,8 +486,6 @@ const CalculationDetailsPage = () => {
       setErrorMessage("Не удалось удалить расчёт");
     }
   };
-  
-
   
 
 
@@ -760,6 +763,20 @@ const CalculationDetailsPage = () => {
 }, 0).toLocaleString("ru-RU", { minimumFractionDigits: 2 })}
 
 </div>
+
+{showDeleteConfirmation && (
+  <div className="modal">
+    <div className="modal-content">
+      <h4>Удалить расчёт?</h4>
+      <p>Вы уверены, что хотите удалить этот расчёт? Это действие необратимо.</p>
+      <div className="modal-buttons">
+        <button onClick={confirmDeleteCalculation} className="delete-button">Удалить</button>
+        <button onClick={() => setShowDeleteConfirmation(false)} className="cancel-button">Отмена</button>
+      </div>
+    </div>
+  </div>
+)}
+
 
 
 {isEditingCalc && (
