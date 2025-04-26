@@ -72,7 +72,7 @@ const AuthPage = ({ isRegister }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        const msg = data?.detail || "Ошибка запроса";
+        const msg = data?.detail || "Ошибка регистрации";
         throw new Error(msg);
       }
 
