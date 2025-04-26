@@ -718,7 +718,8 @@ const CalculationDetailsPage = () => {
   </select>
 </label>
 <label>
-              <input type="checkbox" checked={newSpending.withInflation} onChange={(e) => setNewSpending({ ...newSpending, withInflation: e.target.checked })} />
+<input type="checkbox" checked={editingSpending.withInflation} onChange={(e) => setEditingSpending({ ...editingSpending, withInflation: e.target.checked })} />
+
               Учитывать инфляцию
             </label>
 
