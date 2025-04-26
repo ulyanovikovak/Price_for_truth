@@ -83,7 +83,7 @@ def inflation_id(request, inflation_id):
             'percent': inflation.percent,
         }
         return JsonResponse(context)
-    except Spending.DoesNotExist:
+    except Inflation.DoesNotExist:
         return JsonResponse({'error': 'object not found'}, status=404)
 
 
