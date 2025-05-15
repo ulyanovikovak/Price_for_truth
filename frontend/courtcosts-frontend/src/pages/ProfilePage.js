@@ -20,7 +20,28 @@ const ProfilePage = () => {
       email: "",
       phone_number: "",
     });
-  
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const ErrorToast = ({ message, onClose }) => {
+      if (!message) return null;
+    
+      return (
+        <div className="error-toast">
+          <div className="error-message">
+            {message}
+            <button onClick={onClose}>✖</button>
+          </div>
+        </div>
+      );
+    };
+    
+    useEffect(() => {
+      if (errorMessage) {
+        const timer = setTimeout(() => setErrorMessage(""), 3000);
+        return () => clearTimeout(timer);
+      }
+    }, [errorMessage]);
+    
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -61,11 +82,24 @@ const ProfilePage = () => {
     const updateProfile = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Вы не авторизованы!");
+        setErrorMessage("Вы не авторизованы!");
         navigate("/login");
         return;
       }
-  
+    
+      const { email, first_name, last_name, phone_number } = editedProfile;
+    
+      // Простейшая проверка email-формата
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email.trim()) {
+        setErrorMessage("Поле Email обязательно.");
+        return;
+      }
+      if (!emailRegex.test(email)) {
+        setErrorMessage("Введите корректный email.");
+        return;
+      }
+    
       try {
         const response = await fetchWithRefresh("http://localhost:8000/update-profile/", {
           method: "PUT",
@@ -73,9 +107,9 @@ const ProfilePage = () => {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(editedProfile),
+          body: JSON.stringify({ first_name, last_name, email, phone_number }),
         });
-  
+    
         if (!response.ok) throw new Error("Failed to update profile");
         const updatedUser = await response.json();
         setUser(updatedUser);
@@ -84,6 +118,7 @@ const ProfilePage = () => {
         console.error("Error updating profile:", err);
       }
     };
+    
 
     const fetchWithRefresh = async (url, options = {}) => {
       let token = localStorage.getItem("token");
@@ -173,46 +208,49 @@ const ProfilePage = () => {
   
 
   const createCalculation = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Вы не авторизованы!");
-      navigate("/login");
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setErrorMessage("Вы не авторизованы!");
+    navigate("/login");
+    return;
+  }
+
+  const { name, description, sum } = newCalculation;
+
+  if (!name.trim() || !sum.trim()) {
+    setErrorMessage("Поля 'Название' и 'Сумма' обязательны!");
+    return;
+  }
+
+  try {
+    const response = await fetchWithRefresh("http://localhost:8000/calculations/create/", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        sum: parseFloat(sum),
+        ...(description?.trim() ? { description: description.trim() } : {}),
+      }),
+    });
+
+    if (response.status === 403) {
+      setErrorMessage("Ошибка 403: Доступ запрещен. Проверьте авторизацию.");
       return;
     }
 
-    if (!newCalculation.name || !newCalculation.description || !newCalculation.sum) {
-      alert("Заполните все поля!");
-      return;
-    }
+    if (!response.ok) throw new Error("Failed to create calculation");
+    const createdCalculation = await response.json();
+    setCalculations([...calculations, createdCalculation]);
+    setShowCreateForm(false);
+    setNewCalculation({ name: "", description: "", sum: "" });
+  } catch (err) {
+    console.error("Error creating calculation:", err);
+  }
+};
 
-    try {
-      const response = await fetchWithRefresh("http://localhost:8000/calculations/create/", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...newCalculation,
-          sum: parseFloat(newCalculation.sum), // 👈 это важно
-        }),
-        
-      });
-
-      if (response.status === 403) {
-        alert("Ошибка 403: Доступ запрещен. Проверьте авторизацию.");
-        return;
-      }
-
-      if (!response.ok) throw new Error("Failed to create calculation");
-      const createdCalculation = await response.json();
-      setCalculations([...calculations, createdCalculation]);
-      setShowCreateForm(false);
-      setNewCalculation({ name: "", description: "", sum: "" });
-    } catch (err) {
-      console.error("Error creating calculation:", err);
-    }
-  };
 
   const filteredCalculations = calculations.filter((calc) =>
     calc.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -234,7 +272,23 @@ const ProfilePage = () => {
             <p>Имя пользователя: {user.username}</p>
             <p>Email: {user.email}</p>
             <p>Телефон: {user.phone_number || "Не указан"}</p>
-            <button onClick={() => setShowEditForm(true)} className="edit-profile-button">Редактировать</button>
+            <button
+  onClick={() => {
+    if (user) {
+      setEditedProfile({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        phone_number: user.phone_number || "",
+      });
+    }
+    setShowEditForm(true);
+  }}
+  className="edit-profile-button"
+>
+  Редактировать
+</button>
+
           </>
         ) : (
           <p>Загрузка...</p>
@@ -307,6 +361,8 @@ const ProfilePage = () => {
           )}
         </div>
       </div>
+      <ErrorToast message={errorMessage} onClose={() => setErrorMessage("")} />
+
     </div>
   );
 };
