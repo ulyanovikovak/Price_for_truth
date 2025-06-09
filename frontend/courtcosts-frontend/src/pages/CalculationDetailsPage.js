@@ -184,11 +184,11 @@ const CalculationDetailsPage = () => {
       setNewSpending({
         name: spending.name,
         description: spending.description || "",
-        refund: spending.refund || "",
+        refund: spending.refund || "0.0",
         price: spending.price,
         dateStart: today,
         dateEnd: today,
-        category: spending.category,
+        category: parseInt(spending.category),
         withInflation: spending.withInflation || false,
       });
 
@@ -385,7 +385,7 @@ const CalculationDetailsPage = () => {
 
         const refund = parseFloat(s.refund || 0);
         const categoryName = categories.find((c) => c.id === s.category)?.name || "—";
-        const refundableAmount = price * (refund / 100);
+        const refundableAmount = parseFloat((price * (refund / 100)).toFixed(2));
         const startDate = s.dateStart || "—";
     
         return [
@@ -402,12 +402,13 @@ const CalculationDetailsPage = () => {
         `${totalSpending.toFixed(2)} ₽`,
         {
           text: `${spendings.reduce((acc, s) => {
-            const p = parseFloat(s.price || 0);
-            const r = parseFloat(s.refund || 0);
-            return acc + p * (r / 100);
+            const price = parseFloat(s.adjusted_price || s.price || 0);
+            const refund = parseFloat(s.refund || 0);
+            return acc + price * (refund / 100);
           }, 0).toFixed(2)} ₽`,
           bold: true,
         },
+        
       ],
     ];
     
@@ -656,15 +657,41 @@ const CalculationDetailsPage = () => {
     ))}
   </select>
 </label>
-<label>
-              <input type="checkbox" checked={newSpending.withInflation} onChange={(e) => setNewSpending({ ...newSpending, withInflation: e.target.checked })} />
-              Учитывать инфляцию
-            </label>
+<label className="checkbox-label-row">
+  Учитывать инфляцию
+  <input
+    type="checkbox"
+    checked={newSpending.withInflation}
+    onChange={(e) =>
+      setNewSpending({ ...newSpending, withInflation: e.target.checked })
+    }
+  />
+</label>
+
+
 
 
             <div className="modal-buttons">
               <button onClick={createSpending} className="save-button">Создать</button>
-              <button onClick={() => setShowCreateForm(false)} className="cancel-button">Отмена</button>
+              <button
+  onClick={() => {
+    setShowCreateForm(false);
+    setNewSpending({
+      name: "",
+      description: "",
+      price: "",
+      dateStart: "",
+      dateEnd: "",
+      category: "",
+      withInflation: false,
+      refund: "",
+    });
+  }}
+  className="cancel-button"
+>
+  Отмена
+</button>
+
             </div>
           </div>
         </div>
@@ -720,11 +747,21 @@ const CalculationDetailsPage = () => {
     ))}
   </select>
 </label>
-<label>
-<input type="checkbox" checked={editingSpending.withInflation} onChange={(e) => setEditingSpending({ ...editingSpending, withInflation: e.target.checked })} />
+<label className="checkbox-label">
+Учитывать инфляцию
+  <input
+  
+    type="checkbox"
+    checked={editingSpending.withInflation}
+    onChange={(e) =>
+      setEditingSpending({ ...editingSpending, withInflation: e.target.checked })
+    }
+  />
+  {/* <span>Учитывать инфляцию</span> */}
+</label>
 
-              Учитывать инфляцию
-            </label>
+
+
 
 
             <div className="modal-buttons">

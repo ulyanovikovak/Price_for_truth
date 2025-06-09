@@ -1,4 +1,4 @@
-const API_BASE = 'catalog/admin';
+const API_BASE = 'http://localhost:8000/catalog/admin';
 const REFRESH_URL = 'http://localhost:8000/token/refresh/';
 
 const headers = (token) => {
@@ -30,7 +30,7 @@ const handleResponse = async (res, retryRequest) => {
   if (res.status === 401 && retryRequest) {
     try {
       const newAccess = await refreshToken();
-      return retryRequest(newAccess); // повтор запроса с новым токеном
+      return retryRequest(newAccess);
     } catch {
       localStorage.removeItem('token');
       localStorage.removeItem('refresh_token');
@@ -43,12 +43,37 @@ const handleResponse = async (res, retryRequest) => {
     if (res.status === 403) {
       window.location.href = '/login';
     }
-    const errorData = await res.json();
+
+    let errorData = {};
+    try {
+      const contentType = res.headers.get("Content-Type");
+      if (contentType && contentType.includes("application/json")) {
+        errorData = await res.json();
+      } else {
+        const text = await res.text();
+        errorData.detail = text || 'Ошибка сервера';
+      }
+    } catch {
+      errorData.detail = 'Ошибка сервера (невалидный ответ)';
+    }
+
     throw new Error(errorData.detail || 'Ошибка запроса');
   }
 
-  return res.json();
+  // 204 No Content — ничего не возвращаем
+  if (res.status === 204) return null;
+
+  // Попробовать распарсить JSON, если Content-Type правильный
+  const contentType = res.headers.get("Content-Type");
+  if (contentType && contentType.includes("application/json")) {
+    return res.json();
+  }
+
+  // иначе вернуть текст, если это не JSON
+  return res.text();
 };
+
+
 
 export const fetchAll = async (path, token) => {
   const retry = (newToken) =>
