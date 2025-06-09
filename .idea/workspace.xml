@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="">
+    <list default="true" id="d8fb294d-1f42-407d-8c4c-7ffd09f83701" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/courtcosts/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/courtcosts/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courtcosts/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courtcosts/user/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/courtcosts-frontend/src/pages/CalculationDetailsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/courtcosts-frontend/src/pages/CalculationDetailsPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746627156771</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="fix">
+      <option name="closed" value="true" />
+      <created>1749474509104</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1749474509104</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -321,6 +325,7 @@
     <MESSAGE value="fix inflation" />
     <MESSAGE value="add test" />
     <MESSAGE value="fix docker" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix docker" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
 </project>
