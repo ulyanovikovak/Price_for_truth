@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import sys
-
+from datetime import timedelta
 
 
 
@@ -39,7 +39,8 @@ ALLOWED_HOSTS = ['*']
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Разрешить фронтенд
+    "http://localhost:3000",
+    "http://localhost:3001",
 ]
 
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
@@ -63,7 +64,13 @@ INSTALLED_APPS = [
     'user',
 ]
 
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    # 'ROTATE_REFRESH_TOKENS': False,
+    # 'BLACKLIST_AFTER_ROTATION': True,
+    # 'UPDATE_LAST_LOGIN': True,
+}
 
 
 

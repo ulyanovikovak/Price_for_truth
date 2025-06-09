@@ -51,7 +51,7 @@ class Calculation(models.Model):
 
 
 class SpendingCalculation(models.Model):
-    name = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=150)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     dateStart = models.DateField()
